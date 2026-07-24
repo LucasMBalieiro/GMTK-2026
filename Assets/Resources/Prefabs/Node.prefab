@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6753674168591204387}
   - component: {fileID: 3597386464290995690}
   - component: {fileID: 6953710006915846915}
+  - component: {fileID: 7724184329143930438}
   m_Layer: 0
   m_Name: Node
   m_TagString: Untagged
@@ -128,3 +129,17 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
+--- !u!114 &7724184329143930438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5515167241783489096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9193f86f839c420ab92ccfc169b29a04, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RoguelikeMap.MapNodeClickHandler
+  NodeId: 0
+  Type: 0
