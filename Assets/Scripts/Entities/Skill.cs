@@ -24,5 +24,11 @@ namespace Entities
             target = null;
             this.value = value;
         }
+        public Skill(SkillType type, Entity target, int value)
+        {
+            this.type = type;
+            this.target = target;
+            this.value = value;
+        }
     }
 }

@@ -5,7 +5,7 @@ namespace Entities
 {
     public class Entity : MonoBehaviour
     {
-        [SerializeField] private EntityData data;
+        public EntityData Data { get; private set; }
 
         private int CurrentHealth { get; set; }
         private int CurrentAmmo { get; set; }
@@ -20,8 +20,8 @@ namespace Entities
 
         private void Start()
         {
-            CurrentHealth = data.maxHealth;
-            CurrentAmmo = data.startingAmmo;
+            CurrentHealth = Data.maxHealth;
+            CurrentAmmo = Data.startingAmmo;
         }
 
         private void OnEnable()
@@ -60,14 +60,14 @@ namespace Entities
         public void Reload(int amount)
         {
             Debug.Log($"{gameObject.name} reload");
-            CurrentAmmo = Mathf.Min(CurrentAmmo + amount, data.maxAmmo);
+            CurrentAmmo = Mathf.Min(CurrentAmmo + amount, Data.maxAmmo);
         }
 
         public void Heal(int amount)
         {
             if (canHeal)
             {
-                CurrentHealth = Mathf.Min(CurrentHealth + amount, data.maxHealth);
+                CurrentHealth = Mathf.Min(CurrentHealth + amount, Data.maxHealth);
                 Debug.Log($"{gameObject.name} healed {amount}.");
             }
             else

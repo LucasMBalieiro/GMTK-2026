@@ -6,20 +6,30 @@ namespace Entities
     public class PlayerInputHandler : MonoBehaviour
     {
         private Entity self;
+
+        //TODO: Fazer uma versão unica disso no GameManager
+        [SerializeField] private Stats PlayerStats;
         
-        [SerializeField] private Skill reload;
-        [SerializeField] private Skill attack;
-        [SerializeField] private Skill defend;
-        [SerializeField] private Skill heal;
+        private Skill reload;
+        private Skill attack;
+        private Skill defend;
+        private Skill heal;
         
         private void Awake()
         {
             self = GetComponent<Entity>();
             self.IsPlayer = true;
             
-            reload.target = self;
-            defend.target = self;
-            heal.target = self;
+            SetSkills();
+        }
+
+        private void SetSkills()
+        {
+            defend = new Skill(SkillType.Defend, self, 0);
+            attack = new Skill(SkillType.Attack, PlayerStats.attackDamage);
+            reload = new Skill(SkillType.Reload, self, PlayerStats.reloadAmount);
+            heal = new Skill(SkillType.Heal, self, self.Data.maxHealth);
+            
         }
 
         public void Reload()

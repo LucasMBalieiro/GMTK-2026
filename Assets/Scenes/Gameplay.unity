@@ -178,6 +178,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Orchestrator
   tempoTicks: 4
+  startupTickAmount: 2
   tickSound: {fileID: 11400000, guid: 6c15d14b94bf1d8179a16f878eb13c91, type: 2}
   noPlayerInputSound: {fileID: 11400000, guid: 142a9689a06245d14aa8efd473b01d1a, type: 2}
 --- !u!1 &320687834
@@ -616,22 +617,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d9b4b7586b4869b79827209b85d665d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Entities.PlayerInputHandler
-  reload:
-    type: 2
-    target: {fileID: 0}
-    value: 1
-  attack:
-    type: 1
-    target: {fileID: 0}
-    value: 1
-  defend:
-    type: 0
-    target: {fileID: 0}
-    value: 0
-  heal:
-    type: 3
-    target: {fileID: 0}
-    value: 1
+  PlayerStats:
+    attackDamage: 1
+    reloadAmount: 1
+    defencesInSequence: 1
 --- !u!114 &431085828
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -644,7 +633,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edef720198064bfab19dc0a1b71d60cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Entities.Entity
-  data: {fileID: 11400000, guid: 61b95f39d9d8cc258962373c2020fea8, type: 2}
 --- !u!1 &464936351
 GameObject:
   m_ObjectHideFlags: 0
