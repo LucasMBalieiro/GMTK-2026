@@ -1,13 +1,14 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace RoguelikeMap
 {
-    public class MapNodeClickHandler : MonoBehaviour
+    public class MapNodeClickHandler : MonoBehaviour, IPointerClickHandler
     {
         public int NodeId;
         public NodeType Type;
-
-        private void OnMouseDown()
+        
+        public void OnPointerClick(PointerEventData eventData)
         {
             Debug.Log($"Clicou no nó {NodeId} ({Type})");
         }
