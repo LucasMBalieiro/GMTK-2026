@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 
 namespace UI
@@ -6,6 +7,9 @@ namespace UI
     public class StartMatchUI : MonoBehaviour
     {
         EventBinding<StartupTickEvent> startupBinding;
+        //TODO: trocar pra imagem bonitinha
+        [SerializeField] private TextMeshProUGUI DEBUGText;
+        
 
         public void OnEnable()
         {
@@ -20,6 +24,7 @@ namespace UI
         
         private void ChangeUI(StartupTickEvent tick)
         {
+            DEBUGText.text = tick.ticksRemaining.ToString();
             if(tick.ticksRemaining == 0) Destroy(gameObject);
         }
 

@@ -13,6 +13,8 @@ public struct StartupTickEvent : IEvent
 public class Orchestrator : MonoBehaviour
 {
     [SerializeField] private int tempoTicks;
+    [SerializeField] private int startupTickAmount = 2;
+    
 
     [SerializeField] private SoundData tickSound;
     [SerializeField] private SoundData noPlayerInputSound;
@@ -27,7 +29,7 @@ public class Orchestrator : MonoBehaviour
 
     private void OnEnable()
     {
-        startupBufferTicks = tempoTicks * 3;
+        startupBufferTicks = tempoTicks * startupTickAmount;
         
         tickBinding = new EventBinding<Tick>(HandleTicking); 
         EventBus<Tick>.Register(tickBinding);
@@ -55,6 +57,9 @@ public class Orchestrator : MonoBehaviour
         if (startupBufferTicks > 0)
         {
             startupBufferTicks--;
+
+            SoundManager.Instance.CreateSound().Play(startupBufferTicks % tempoTicks == 0 ? noPlayerInputSound : tickSound);
+
             EventBus<StartupTickEvent>.Raise(new StartupTickEvent { ticksRemaining = startupBufferTicks });
             return;
         }
