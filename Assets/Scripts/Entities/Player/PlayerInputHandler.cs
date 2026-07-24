@@ -15,6 +15,7 @@ namespace Entities
         private void Awake()
         {
             self = GetComponent<Entity>();
+            self.IsPlayer = true;
             
             reload.target = self;
             defend.target = self;
@@ -23,23 +24,23 @@ namespace Entities
 
         public void Reload()
         {
-            Orchestrator.Instance.AddSkill(self, reload);
+            EventBus<AddSkillEvent>.Raise(new AddSkillEvent { caster = self, skill = reload });
         }
 
         public void Defend()
         {
-            Orchestrator.Instance.AddSkill(self, defend);
+            EventBus<AddSkillEvent>.Raise(new AddSkillEvent { caster = self, skill = defend });
         }
 
         public void Heal()
         {
-            Orchestrator.Instance.AddSkill(self, heal);
+            EventBus<AddSkillEvent>.Raise(new AddSkillEvent { caster = self, skill = heal });
         }
 
         public void Attack(Entity target)
         {
             attack.target = target;
-            Orchestrator.Instance.AddSkill(self, attack);
+            EventBus<AddSkillEvent>.Raise(new AddSkillEvent { caster = self, skill = attack });
         }
     }
 }

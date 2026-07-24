@@ -1,63 +1,93 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AudioSystem;
 using Entities;
 using UnityEngine;
-using UnityUtils;
 
-public class Orchestrator : Singleton<Orchestrator>
+public struct StartupTickEvent : IEvent 
+{
+    public int ticksRemaining;
+}
+
+public class Orchestrator : MonoBehaviour
 {
     [SerializeField] private int tempoTicks;
-    private Metronome metronome;
+
+    [SerializeField] private SoundData tickSound;
+    [SerializeField] private SoundData noPlayerInputSound;
+
+    private int startupBufferTicks;
     private int currentTick = 0;
 
     private readonly Dictionary<Entity, Skill> skillPool = new Dictionary<Entity, Skill>();
-    
-    private void Start()
-    {
-        metronome = GetComponent<Metronome>();
-    }
+
+    private EventBinding<AddSkillEvent> skillBinding;
+    private EventBinding<Tick> tickBinding;
 
     private void OnEnable()
     {
-        metronome.Tick += HandleTicking;
-        metronome.Play();
+        startupBufferTicks = tempoTicks * 3;
+        
+        tickBinding = new EventBinding<Tick>(HandleTicking); 
+        EventBus<Tick>.Register(tickBinding);
+        
+        skillBinding = new EventBinding<AddSkillEvent>(AddSkill);
+        EventBus<AddSkillEvent>.Register(skillBinding);
     }
 
     private void OnDisable()
     {
-        metronome.Tick -= HandleTicking;
-        metronome.Pause();
+        EventBus<Tick>.Deregister(tickBinding);
+        
+        EventBus<AddSkillEvent>.Deregister(skillBinding);
+        skillBinding =  null;
     }
 
+    private void AddSkill(AddSkillEvent eventData)
+    {
+        skillPool[eventData.caster] = eventData.skill;
+    }
+    
     private void HandleTicking()
     {
+        
+        if (startupBufferTicks > 0)
+        {
+            startupBufferTicks--;
+            EventBus<StartupTickEvent>.Raise(new StartupTickEvent { ticksRemaining = startupBufferTicks });
+            return;
+        }
+        
         currentTick++;
         
         if (currentTick >= tempoTicks)
         {
+            SoundManager.Instance.CreateSound().Play(noPlayerInputSound);
             HandleSkillOrder();
             currentTick = 0;
         }
         else
         {
-            //TODO: ADD SOUND
+            SoundManager.Instance.CreateSound().Play(tickSound);
         }
     }
 
     private void HandleSkillOrder()
     {
-        var sortedSkills = skillPool.Values.OrderByDescending(s => s.type).ToList();
-        
-        foreach (var skill in sortedSkills)
+        var sortedSkills = skillPool
+            .OrderByDescending(kvp => kvp.Value.type)
+            .ThenByDescending(kvp => kvp.Key.IsPlayer) 
+            .ToList();
+
+        foreach (var (entity, skill) in sortedSkills)
         {
+            if (entity.IsDead) continue;
             ExecuteSkill(skill);
         }
-        foreach (var entity in skillPool.Keys)
-        {
-            entity.ResetConditions();
-        }
-        
+    
+        EventBus<ResetConditions>.Raise(new ResetConditions());
+    
         skillPool.Clear();
     }
 
@@ -82,8 +112,5 @@ public class Orchestrator : Singleton<Orchestrator>
         }
     }
     
-    public void AddSkill(Entity caster, Skill skill)
-    {
-        skillPool[caster] = skill;
-    }
+    
 }

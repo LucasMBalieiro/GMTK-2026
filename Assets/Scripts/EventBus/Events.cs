@@ -1,8 +1,14 @@
-﻿public interface IEvent { }
+﻿using Entities;
 
-public struct TestEvent : IEvent { }
+public interface IEvent { }
 
-public struct PlayerEvent : IEvent {
-    public int health;
-    public int mana;
+public struct AddSkillEvent : IEvent 
+{
+    public Entity caster;
+    public Skill skill;
 }
+public struct ResetConditions : IEvent { }
+
+public struct Tick : IEvent { }
+public struct PlayMetronome: IEvent { }
+public struct PauseMetronome: IEvent { }

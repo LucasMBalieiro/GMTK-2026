@@ -9,14 +9,21 @@ public class Metronome : MonoBehaviour
     public int intervalMs = 1000;
 
     private CancellationTokenSource cancellationTokenSource;
-    private bool isPaused = false;
+    private bool isPaused = true;
     private float timerMs = 0f;
     
-    public event Action Tick;
+    private EventBinding<PlayMetronome> playBinging;
+    private EventBinding<PauseMetronome> pauseBinding;
 
     private void OnEnable()
     {
         cancellationTokenSource = new CancellationTokenSource();
+
+        playBinging = new EventBinding<PlayMetronome>(Play);
+        EventBus<PlayMetronome>.Register(playBinging);
+
+        pauseBinding = new EventBinding<PauseMetronome>(Pause);
+        EventBus<PauseMetronome>.Register(pauseBinding);
         
         MetronomeTask(cancellationTokenSource.Token).Forget();
     }
@@ -26,11 +33,14 @@ public class Metronome : MonoBehaviour
         cancellationTokenSource.Cancel();
         cancellationTokenSource.Dispose();
         cancellationTokenSource = null;
+        
+        EventBus<PlayMetronome>.Deregister(playBinging);
+        EventBus<PauseMetronome>.Deregister(pauseBinding);
     }
-    
-    public void Pause() { isPaused = true; }
-    
-    public void Play() { isPaused = false; }
+
+    private void Pause() { isPaused = true; }
+
+    private void Play() { isPaused = false; }
 
     private async UniTaskVoid MetronomeTask(CancellationToken token)
     {
@@ -48,7 +58,7 @@ public class Metronome : MonoBehaviour
             if (!(timerMs >= intervalMs)) continue;
             
             timerMs -= intervalMs; 
-            Tick?.Invoke();
+            EventBus<Tick>.Raise(new Tick());
         }
     }
 }

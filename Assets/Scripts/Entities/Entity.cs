@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Entities
@@ -5,12 +6,17 @@ namespace Entities
     public class Entity : MonoBehaviour
     {
         [SerializeField] private EntityData data;
-        
-        public int CurrentHealth { get; private set; }
-        public int CurrentAmmo { get; private set; }
+
+        private int CurrentHealth { get; set; }
+        private int CurrentAmmo { get; set; }
+        public bool IsPlayer { get; set; } 
+        public bool IsDead => CurrentHealth <= 0;
         
         private bool canHeal = true;
         private bool isDefending = false;
+        
+        public event Action OnDeath;
+        private EventBinding<ResetConditions> resetBinding;
 
         private void Start()
         {
@@ -18,9 +24,20 @@ namespace Entities
             CurrentAmmo = data.startingAmmo;
         }
 
+        private void OnEnable()
+        {
+            resetBinding = new EventBinding<ResetConditions>(ResetConditions);
+            EventBus<ResetConditions>.Register(resetBinding);
+        }
+
+        private void OnDisable()
+        {
+            EventBus<ResetConditions>.Deregister(resetBinding);
+        }
+
         public void Defend()
         {
-            Debug.Log($"{gameObject.name} raises their shield.");
+            Debug.Log($"{gameObject.name} defend");
             isDefending = true;
         }
 
@@ -29,7 +46,14 @@ namespace Entities
             if(isDefending) return;
 
             Debug.Log($"{gameObject.name} took {amount} damage");
+            
             CurrentHealth -= amount;
+            
+            if (IsDead)
+            {
+                //TODO: Handle deaths
+                OnDeath?.Invoke();
+            }
             canHeal = false;
         }
 
@@ -44,15 +68,15 @@ namespace Entities
             if (canHeal)
             {
                 CurrentHealth = Mathf.Min(CurrentHealth + amount, data.maxHealth);
-                Debug.Log($"{gameObject.name} healed for {amount}.");
+                Debug.Log($"{gameObject.name} healed {amount}.");
             }
             else
             {
-                Debug.Log($"{gameObject.name} cant heal");
+                Debug.Log($"{gameObject.name} heal canceled");
             }
         }
 
-        public void ResetConditions()
+        private void ResetConditions()
         {
             canHeal = true;
             isDefending = false;
