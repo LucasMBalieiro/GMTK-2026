@@ -1,6 +1,7 @@
 using System;
+using UnityEngine;
 
-namespace Actors
+namespace Entities
 {
     public enum SkillType
     {
@@ -14,7 +15,7 @@ namespace Actors
     public class Skill
     {
         public SkillType type;
-        public Entity target;
+        [HideInInspector] public Entity target;
         public int value;
         
         public Skill(SkillType type, int value)
@@ -22,11 +23,6 @@ namespace Actors
             this.type = type;
             target = null;
             this.value = value;
-        }
-
-        public void SetTarget(Entity entity)
-        {
-            this.target = entity;
         }
     }
 }

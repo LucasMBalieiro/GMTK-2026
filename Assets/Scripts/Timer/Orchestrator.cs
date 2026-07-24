@@ -1,17 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Actors;
+using Entities;
 using UnityEngine;
 using UnityUtils;
 
 public class Orchestrator : Singleton<Orchestrator>
 {
-    private Metronome metronome;
     [SerializeField] private int tempoTicks;
+    private Metronome metronome;
     private int currentTick = 0;
 
-    private Dictionary<Entity, Skill> skillPool = new Dictionary<Entity, Skill>();
+    private readonly Dictionary<Entity, Skill> skillPool = new Dictionary<Entity, Skill>();
     
     private void Start()
     {
@@ -34,7 +34,7 @@ public class Orchestrator : Singleton<Orchestrator>
     {
         currentTick++;
         
-        if (currentTick > tempoTicks)
+        if (currentTick >= tempoTicks)
         {
             HandleSkillOrder();
             currentTick = 0;
@@ -69,13 +69,13 @@ public class Orchestrator : Singleton<Orchestrator>
                 skill.target.Defend();
                 break;
             case SkillType.Attack:
-                skill.target.TakeDamage();
+                skill.target.TakeDamage(skill.value);
                 break;
             case SkillType.Reload:
-                skill.target.Reload();
+                skill.target.Reload(skill.value);
                 break;
             case SkillType.Heal:
-                skill.target.Heal();
+                skill.target.Heal(skill.value);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
