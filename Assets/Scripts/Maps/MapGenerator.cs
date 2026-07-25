@@ -12,6 +12,13 @@ namespace RoguelikeMap
         Boss
     }
 
+    public enum NodeProgressState
+    {
+        Locked,
+        Available,
+        Visited
+    }
+
     [Serializable]
     public class MapNode
     {
@@ -131,7 +138,7 @@ namespace RoguelikeMap
 
             foreach (var node in current)
             {
-                int connections = rng.NextDouble() < 0.3 ? 2 : 1; // 30% de chance de abrir um segundo caminho
+                int connections = rng.NextDouble() < 0.3 ? 2 : 1; 
                 var candidates = next
                     .OrderBy(n => Mathf.Abs(n.IndexInLayer - node.IndexInLayer))
                     .Take(Mathf.Min(connections + 1, next.Count))
@@ -146,7 +153,6 @@ namespace RoguelikeMap
                 }
             }
 
-            // garante que nenhum nó da próxima camada fique órfão (sem ninguém apontando pra ele)
             foreach (var orphan in next.Where(n => !reached.Contains(n.Id)))
             {
                 var closest = current

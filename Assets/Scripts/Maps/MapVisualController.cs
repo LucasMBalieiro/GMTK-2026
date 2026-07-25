@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace RoguelikeMap
 {
@@ -11,6 +12,13 @@ namespace RoguelikeMap
         public NodeType Type;
         public Sprite Sprite;
         public Color Tint;
+    }
+
+    [Serializable]
+    public struct NodeTypeScene
+    {
+        public NodeType Type;
+        public string SceneName;
     }
     [ExecuteAlways]
     public class MapVisualController : MonoBehaviour
@@ -31,6 +39,12 @@ namespace RoguelikeMap
         public GameObject nodePrefab; 
         public List<NodeTypeVisual> nodeVisuals = new List<NodeTypeVisual>();
         public float nodeScale = 1.5f;
+        [Tooltip("Sprite usado em qualquer nó bloqueado (cadeado). Arraste aqui uma única vez.")]
+        public Sprite lockedNodeSprite;
+
+        [Header("Cenas por tipo de nó")]
+        [Tooltip("Nome exato da cena (deve estar em Build Settings > Scenes In Build)")]
+        public List<NodeTypeScene> nodeScenes = new List<NodeTypeScene>();
 
         [Header("Linhas")]
         public Material lineMaterial;
@@ -44,6 +58,10 @@ namespace RoguelikeMap
         [Range(0.4f, 1f)]
         [Tooltip("Quanto da tela o grafo deve preencher. 0.8 = grafo ocupa 80%, sobrando 20% de respiro nas bordas.")]
         public float viewportFillPercent = 0.8f;
+
+        private MapData currentMap;
+        private Dictionary<int, GameObject> spawnedNodes;
+        private readonly List<int> visitedPath = new List<int>();
 
         private void OnEnable() => Rebuild();
 
@@ -59,6 +77,11 @@ namespace RoguelikeMap
             SpawnBackground(map, bounds);
             var spawned = SpawnNodes(map);
             SpawnConnections(map, spawned);
+
+            currentMap = map;
+            spawnedNodes = spawned;
+            visitedPath.Clear(); 
+            RefreshAllNodeStates();
 
             if (fitCameraToMap) FitCamera(bounds);
         }
@@ -112,8 +135,7 @@ namespace RoguelikeMap
 
             var bg = Instantiate(backgroundPrefab, transform);
             bg.name = "Background";
-            bg.transform.position = new Vector3(bounds.center.x, bounds.center.y, 0.1f); // atrás dos nós
-
+            bg.transform.position = new Vector3(bounds.center.x, bounds.center.y, 0.1f); 
             var spriteSize = bg.sprite.bounds.size;
             var targetSize = new Vector2(bounds.size.x, bounds.size.y) + Vector2.one * backgroundPadding * 2f;
             bg.transform.localScale = new Vector3(
@@ -123,27 +145,37 @@ namespace RoguelikeMap
             bg.sortingOrder = -10;
         }
 
-        private Dictionary<int, GameObject> SpawnNodes(MapData map)
+       private Dictionary<int, GameObject> SpawnNodes(MapData map)
+    {
+    var spawned = new Dictionary<int, GameObject>();
+    foreach (var node in map.Nodes)
         {
-            var spawned = new Dictionary<int, GameObject>();
-            foreach (var node in map.Nodes)
-            {
-                var go = Instantiate(nodePrefab, node.Position, Quaternion.identity, transform);
-                go.name = $"Node_{node.Id}_{node.Type}";
-                go.transform.localScale = Vector3.one * nodeScale;
+        var go = Instantiate(nodePrefab, node.Position, Quaternion.identity, transform);
+        go.name = $"Node_{node.Id}_{node.Type}";
+        go.transform.localScale = Vector3.one * nodeScale;
 
-                var visual = nodeVisuals.FirstOrDefault(v => v.Type == node.Type);
-                var sr = go.GetComponentInChildren<SpriteRenderer>();
-                if (sr != null)
-                {
-                    if (visual.Sprite != null) sr.sprite = visual.Sprite;
-                    sr.color = visual.Tint == default ? Color.white : visual.Tint;
-                    sr.sortingOrder = 1;
-                }
-                spawned[node.Id] = go;
-            }
-            return spawned;
+        var visual = nodeVisuals.FirstOrDefault(v => v.Type == node.Type);
+        var sr = go.GetComponentInChildren<SpriteRenderer>();
+        if (sr != null)
+        {
+            if (visual.Sprite != null) sr.sprite = visual.Sprite;
+            sr.color = visual.Tint == default ? Color.white : visual.Tint;
+            sr.sortingOrder = 1;
         }
+
+        var clickHandler = go.GetComponentInChildren<MapNodeClickHandler>();
+        if (clickHandler != null)
+        {
+            clickHandler.NodeId = node.Id;
+            clickHandler.Type = node.Type;
+            clickHandler.Controller = this;
+            clickHandler.Initialize(sr);
+        }
+
+        spawned[node.Id] = go;
+        }
+    return spawned;
+    }
 
         private void SpawnConnections(MapData map, Dictionary<int, GameObject> spawnedNodes)
         {
@@ -179,6 +211,70 @@ namespace RoguelikeMap
             var b = new Bounds();
             b.SetMinMax(new Vector3(min.x, min.y, 0), new Vector3(max.x, max.y, 0));
             return b;
+        }
+
+        public NodeProgressState GetNodeState(int nodeId)
+        {
+            if (currentMap == null) return NodeProgressState.Locked;
+            if (visitedPath.Contains(nodeId)) return NodeProgressState.Visited;
+
+            if (visitedPath.Count == 0)
+            {
+                var startNode = currentMap.Nodes.First(n => n.Layer == 0);
+                return nodeId == startNode.Id ? NodeProgressState.Available : NodeProgressState.Locked;
+            }
+
+            int currentId = visitedPath[visitedPath.Count - 1];
+            var currentNode = currentMap.Nodes.FirstOrDefault(n => n.Id == currentId);
+            if (currentNode != null && currentNode.ConnectionsToNextLayer.Contains(nodeId))
+                return NodeProgressState.Available;
+
+            return NodeProgressState.Locked;
+        }
+
+        public bool TrySelectNode(int nodeId)
+        {
+            var state = GetNodeState(nodeId);
+            if (state != NodeProgressState.Available)
+            {
+                Debug.Log($"Nó {nodeId} não pode ser selecionado agora (estado: {state}).");
+                return false;
+            }
+
+            visitedPath.Add(nodeId);
+            RefreshAllNodeStates();
+            OnNodeSelected(nodeId);
+            return true;
+        }
+
+        public int GetCurrentNodeId() => visitedPath.Count > 0 ? visitedPath[visitedPath.Count - 1] : -1;
+
+        private void OnNodeSelected(int nodeId)
+        {
+            var node = currentMap?.Nodes.FirstOrDefault(n => n.Id == nodeId);
+            if (node == null) return;
+
+            var mapping = nodeScenes.FirstOrDefault(s => s.Type == node.Type);
+            if (string.IsNullOrEmpty(mapping.SceneName))
+            {
+                Debug.LogWarning($"Nenhuma cena configurada para o tipo {node.Type}.");
+                return;
+            }
+
+            SceneManager.LoadScene(mapping.SceneName);
+        }
+
+        private void RefreshAllNodeStates()
+        {
+            if (currentMap == null || spawnedNodes == null) return;
+
+            foreach (var node in currentMap.Nodes)
+            {
+                if (!spawnedNodes.TryGetValue(node.Id, out var go)) continue;
+                var clickHandler = go.GetComponentInChildren<MapNodeClickHandler>();
+                if (clickHandler != null)
+                    clickHandler.SetProgressState(GetNodeState(node.Id));
+            }
         }
     }
 }
