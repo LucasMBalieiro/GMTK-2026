@@ -5,10 +5,10 @@ namespace Entities
 {
     public class Entity : MonoBehaviour
     {
-        public EntityData Data { get; private set; }
+        public EntityData data;
 
-        private int CurrentHealth { get; set; }
-        private int CurrentAmmo { get; set; }
+        public int CurrentHealth { get; private set; }
+        public int CurrentAmmo { get; private set; }
         public bool IsPlayer { get; set; } 
         public bool IsDead => CurrentHealth <= 0;
         
@@ -18,10 +18,10 @@ namespace Entities
         public event Action OnDeath;
         private EventBinding<ResetConditions> resetBinding;
 
-        private void Start()
+        private void Awake()
         {
-            CurrentHealth = Data.maxHealth;
-            CurrentAmmo = Data.startingAmmo;
+            CurrentHealth = data.maxHealth;
+            CurrentAmmo = data.startingAmmo;
         }
 
         private void OnEnable()
@@ -60,14 +60,20 @@ namespace Entities
         public void Reload(int amount)
         {
             Debug.Log($"{gameObject.name} reload");
-            CurrentAmmo = Mathf.Min(CurrentAmmo + amount, Data.maxAmmo);
+            CurrentAmmo = Mathf.Min(CurrentAmmo + amount, data.maxAmmo);
+        }
+        
+        public void ConsumeAmmo(int amount)
+        {
+            CurrentAmmo = Mathf.Max(0, CurrentAmmo - amount);
+            Debug.Log($"{gameObject.name} consumed {amount} ammo. Ammo left: {CurrentAmmo}");
         }
 
         public void Heal(int amount)
         {
             if (canHeal)
             {
-                CurrentHealth = Mathf.Min(CurrentHealth + amount, Data.maxHealth);
+                CurrentHealth = Mathf.Min(CurrentHealth + amount, data.maxHealth);
                 Debug.Log($"{gameObject.name} healed {amount}.");
             }
             else

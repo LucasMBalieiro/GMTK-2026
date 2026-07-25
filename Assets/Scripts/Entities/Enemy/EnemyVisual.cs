@@ -7,6 +7,9 @@ namespace Entities
     {
         public Entity Entity { get; private set; }
 
+        [SerializeField] private EnemyIconGrid healthGrid;
+        [SerializeField] private EnemyIconGrid bulletGrid;
+
         private void Awake()
         {
             Entity =  GetComponent<Entity>();
@@ -14,7 +17,7 @@ namespace Entities
         
         public void SelectedAsTarget()
         {
-
+            Debug.Log($"{Entity.name}Selected as target");
         }
     }
 }

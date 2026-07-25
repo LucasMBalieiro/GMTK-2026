@@ -81,22 +81,22 @@ public class Orchestrator : MonoBehaviour
     private void HandleSkillOrder()
     {
         var sortedSkills = skillPool
-            .OrderByDescending(kvp => kvp.Value.type)
+            .OrderBy(kvp => kvp.Value.type)
             .ThenByDescending(kvp => kvp.Key.IsPlayer) 
             .ToList();
 
         foreach (var (entity, skill) in sortedSkills)
         {
             if (entity.IsDead) continue;
-            ExecuteSkill(skill);
+            ExecuteSkill(entity, skill);
         }
-    
+        
         EventBus<ResetConditions>.Raise(new ResetConditions());
-    
         skillPool.Clear();
+        EventBus<RequestNextActionEvent>.Raise(new RequestNextActionEvent());
     }
-
-    private static void ExecuteSkill(Skill skill)
+    
+    private static void ExecuteSkill(Entity caster, Skill skill)
     {
         switch (skill.type)
         {
@@ -104,6 +104,7 @@ public class Orchestrator : MonoBehaviour
                 skill.target.Defend();
                 break;
             case SkillType.Attack:
+                caster.ConsumeAmmo(1); 
                 skill.target.TakeDamage(skill.value);
                 break;
             case SkillType.Reload:

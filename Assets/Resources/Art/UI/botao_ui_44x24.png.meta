@@ -1,19 +1,10 @@
 fileFormatVersion: 2
-guid: 2a285ff86f07c4a5ba3b1a415970b252
+guid: fbfb98494f36c9eecb93d72e559f00af
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2852443166016097488
-    second: Crosshair_0
-  - first:
-      213: 528818951868578185
-    second: Crosshair_1
-  - first:
-      213: 6965800085573315464
-    second: Crosshair_2
-  - first:
-      213: 4247978643584613240
-    second: Crosshair_3
+      213: -7289215357544914129
+    second: botao_ui_44x24_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -61,7 +52,7 @@ TextureImporter:
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteBorder: {x: 4, y: 5, z: 4, w: 4}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
@@ -122,89 +113,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Crosshair_0
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 9
-        width: 7
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 033be9bad061a68d0800000000000000
-      internalID: -2852443166016097488
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Crosshair_1
-      rect:
-        serializedVersion: 2
-        x: 9
-        y: 9
-        width: 7
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 989fe90f80eb65700800000000000000
-      internalID: 528818951868578185
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Crosshair_2
+      name: botao_ui_44x24_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 7
-        height: 7
+        width: 44
+        height: 24
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 88babfc754e7ba060800000000000000
-      internalID: 6965800085573315464
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Crosshair_3
-      rect:
-        serializedVersion: 2
-        x: 9
-        y: 0
-        width: 7
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 87b7e40d11ad3fa30800000000000000
-      internalID: 4247978643584613240
+      spriteID: f23a632904187da90800000000000000
+      internalID: -7289215357544914129
       vertices: []
       indices: 
       edges: []
@@ -214,7 +139,7 @@ TextureImporter:
     physicsShape: []
     bones: []
     spriteID: 5e97eb03825dee720800000000000000
-    internalID: 0
+    internalID: 1537655665
     vertices: []
     indices: 
     edges: []
@@ -223,10 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Crosshair_0: -2852443166016097488
-      Crosshair_1: 528818951868578185
-      Crosshair_2: 6965800085573315464
-      Crosshair_3: 4247978643584613240
+      botao_ui_44x24_0: -7289215357544914129
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

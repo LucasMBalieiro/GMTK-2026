@@ -7,6 +7,8 @@ public struct AddSkillEvent : IEvent
     public Entity caster;
     public Skill skill;
 }
+
+public struct RequestNextActionEvent : IEvent { }
 public struct ResetConditions : IEvent { }
 
 public struct Tick : IEvent { }

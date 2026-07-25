@@ -15,3 +15,7 @@ MonoBehaviour:
   maxHealth: 3
   maxAmmo: 1
   startingAmmo: 0
+  stats:
+    attackDamage: 1
+    reloadAmount: 1
+    defencesInSequence: 1

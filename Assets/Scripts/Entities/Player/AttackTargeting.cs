@@ -7,7 +7,7 @@ namespace Entities
 {
     public class AttackTargeting : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
-        [SerializeField] private PlayerInputHandler playerInputHandler;
+        [SerializeField] private PlayerController playerController;
 
         [SerializeField] private TextMeshProUGUI text;
     
@@ -30,13 +30,13 @@ namespace Entities
             if(crosshair) image.sprite = crosshair;
             text.color = new Color(text.color.r, text.color.g, text.color.b, 0f);
             Cursor.visible = false;
+            image.raycastTarget = false;
         
             originalPosition = transform.position;
         }
 
         public void OnDrag(PointerEventData eventData)
         {
-            //TODO: tentar um lerp talvez
             transform.position = eventData.position;
         }
 
@@ -46,20 +46,26 @@ namespace Entities
             image.sprite = startingSprite;
             text.color = new Color(text.color.r, text.color.g, text.color.b, 1f);
             Cursor.visible = true;
+            
+            Vector2 mousePosition2D = mainCamera.ScreenToWorldPoint(eventData.position);
         
-            Ray ray = mainCamera.ScreenPointToRay(eventData.position);
+            RaycastHit2D hit = Physics2D.Raycast(mousePosition2D, Vector2.zero);
         
-            if (Physics.Raycast(ray, out RaycastHit hit))
+            if (hit.collider != null)
             {
+                Debug.Log(hit.collider.gameObject);
+                
                 if (hit.collider.TryGetComponent(out EnemyVisual enemy))
                 {
                     if (!enemy.Entity.IsDead)
                     {
                         enemy.SelectedAsTarget();
-                        playerInputHandler.Attack(enemy.Entity);
+                        playerController.Attack(enemy.Entity);
                     }
                 }
             }
+            
+            image.raycastTarget = true;
         }
     }
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Entities
 {
     [RequireComponent(typeof(Entity))]
-    public class PlayerInputHandler : MonoBehaviour
+    public class PlayerController : MonoBehaviour
     {
         private Entity self;
 
@@ -28,7 +28,7 @@ namespace Entities
             defend = new Skill(SkillType.Defend, self, 0);
             attack = new Skill(SkillType.Attack, PlayerStats.attackDamage);
             reload = new Skill(SkillType.Reload, self, PlayerStats.reloadAmount);
-            heal = new Skill(SkillType.Heal, self, self.Data.maxHealth);
+            heal = new Skill(SkillType.Heal, self, self.data.maxHealth);
             
         }
 
