@@ -10,6 +10,12 @@ public struct StartupTickEvent : IEvent
     public int ticksRemaining;
 }
 
+public struct ActionExecutedEvent : IEvent
+{
+    public Entity Caster;
+    public SkillType SkillType;
+}
+
 public class Orchestrator : MonoBehaviour
 {
     [SerializeField] private int tempoTicks;
@@ -98,6 +104,14 @@ public class Orchestrator : MonoBehaviour
     
     private static void ExecuteSkill(Entity caster, Skill skill)
     {
+        // 1. Broadcast the action so visuals can react on the tempo reset!
+        EventBus<ActionExecutedEvent>.Raise(new ActionExecutedEvent 
+        { 
+            Caster = caster, 
+            SkillType = skill.type 
+        });
+
+        // 2. Resolve the logic
         switch (skill.type)
         {
             case SkillType.Defend:

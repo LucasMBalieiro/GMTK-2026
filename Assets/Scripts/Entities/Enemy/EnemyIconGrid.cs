@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Entities
 {
@@ -7,7 +9,9 @@ namespace Entities
         [SerializeField] private Sprite fullSprite;
         [SerializeField] private Sprite emptySprite;
         
-        [SerializeField] private SpriteRenderer[] containers;
+        [SerializeField] private GameObject containerPrefab;
+        private List<SpriteRenderer> containers = new List<SpriteRenderer>();
+        
         [SerializeField] private bool isHealthContainer;
         
         [SerializeField] private Entity entity;
@@ -21,7 +25,8 @@ namespace Entities
             
             for (int i = 0; i < maxContainers; i++)
             {
-                containers[i].gameObject.SetActive(true);
+                var container = Instantiate(containerPrefab, transform);
+                containers.Add(container.GetComponent<SpriteRenderer>());
             }
         }
 

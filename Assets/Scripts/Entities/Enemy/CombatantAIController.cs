@@ -24,8 +24,8 @@ namespace Entities
             
             self.IsPlayer = false;
             
-            attack = new Skill(SkillType.Attack, playerTarget, 1);
-            reload = new Skill(SkillType.Reload, self, 1);
+            attack = new Skill(SkillType.Attack, playerTarget, self.data.stats.attackDamage);
+            reload = new Skill(SkillType.Reload, self, self.data.stats.reloadAmount);
             defend = new Skill(SkillType.Defend, self, 0);
         }
 

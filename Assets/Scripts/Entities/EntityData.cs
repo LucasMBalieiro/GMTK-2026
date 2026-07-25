@@ -12,14 +12,6 @@ namespace Entities
         
         public Stats stats;
         
-        /*
-        public struct Stats
-        {
-            public int attackDamage;
-            public int reloadAmount;
-            public int defencesInSequence;
-        }
-        */
     }
     
     
