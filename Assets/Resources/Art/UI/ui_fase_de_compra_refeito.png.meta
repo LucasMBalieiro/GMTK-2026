@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: a07988ab6e77a744ab8c8c152812e1b8
+guid: f2f2584a07557342aa9baeed5f3fdac0
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1955448553306655712
-    second: Background_0
+      213: -1527101536897933338
+    second: ui_fase_de_compra_refeito_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Background_0
+      name: ui_fase_de_compra_refeito_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 320
-        height: 180
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 024fa93b6e9dcd4e0800000000000000
-      internalID: -1955448553306655712
+      spriteID: 6efde3d3e35aecae0800000000000000
+      internalID: -1527101536897933338
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Background_0: -1955448553306655712
+      ui_fase_de_compra_refeito_0: -1527101536897933338
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
