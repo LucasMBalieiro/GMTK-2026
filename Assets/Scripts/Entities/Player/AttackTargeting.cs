@@ -5,13 +5,18 @@ using UnityEngine.UI;
 
 namespace Entities
 {
-    public class AttackTargeting : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+    public class AttackTargeting : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
     {
         [SerializeField] private PlayerController playerController;
 
         [SerializeField] private TextMeshProUGUI text;
     
         [SerializeField] private Sprite crosshair;
+
+        [SerializeField] private SpriteRenderer gunRenderer;
+        [SerializeField] private Sprite regularGun;
+        [SerializeField] private Sprite highlightedGun;
+        
         private Sprite startingSprite;
     
         private Vector3 originalPosition;
@@ -66,6 +71,16 @@ namespace Entities
             }
             
             image.raycastTarget = true;
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            gunRenderer.sprite = highlightedGun;
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            gunRenderer.sprite = regularGun;
         }
     }
 }
