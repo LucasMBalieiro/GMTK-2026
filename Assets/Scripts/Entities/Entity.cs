@@ -1,12 +1,20 @@
 using System;
 using UnityEngine;
-
 namespace Entities
 {
+    public struct AttackBlockedEvent : IEvent
+    {
+        public Entity Defender;
+    }
+
+    public struct HealInterruptedEvent : IEvent
+    {
+        public Entity Target;
+    }
+
     public class Entity : MonoBehaviour
     {
         public EntityData data;
-
         public int CurrentHealth { get; private set; }
         public int CurrentAmmo { get; private set; }
         public bool IsPlayer { get; set; } 
@@ -23,27 +31,28 @@ namespace Entities
             CurrentHealth = data.maxHealth;
             CurrentAmmo = data.startingAmmo;
         }
-
         private void OnEnable()
         {
             resetBinding = new EventBinding<ResetConditions>(ResetConditions);
             EventBus<ResetConditions>.Register(resetBinding);
         }
-
         private void OnDisable()
         {
             EventBus<ResetConditions>.Deregister(resetBinding);
         }
-
         public void Defend()
         {
             Debug.Log($"{gameObject.name} defend");
             isDefending = true;
         }
-
         public void TakeDamage(int amount)
         {
-            if(isDefending) return;
+            if (isDefending)
+            {
+                Debug.Log($"{gameObject.name} blocked the attack");
+                EventBus<AttackBlockedEvent>.Raise(new AttackBlockedEvent { Defender = this });
+                return;
+            }
 
             Debug.Log($"{gameObject.name} took {amount} damage");
             
@@ -55,7 +64,6 @@ namespace Entities
             }
             canHeal = false;
         }
-
         public void Reload(int amount)
         {
             Debug.Log($"{gameObject.name} reload");
@@ -67,7 +75,6 @@ namespace Entities
             CurrentAmmo = Mathf.Max(0, CurrentAmmo - amount);
             Debug.Log($"{gameObject.name} consumed {amount} ammo. Ammo left: {CurrentAmmo}");
         }
-
         public void Heal(int amount)
         {
             if (canHeal)
@@ -78,9 +85,9 @@ namespace Entities
             else
             {
                 Debug.Log($"{gameObject.name} heal canceled");
+                EventBus<HealInterruptedEvent>.Raise(new HealInterruptedEvent { Target = this });
             }
         }
-
         private void ResetConditions()
         {
             canHeal = true;

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace RoguelikeMap
 {
@@ -15,10 +14,14 @@ namespace RoguelikeMap
     }
 
     [Serializable]
-    public struct NodeTypeScene
+    public struct NodeTypeLayerPool
     {
         public NodeType Type;
-        public string SceneName;
+        [Tooltip("Camada mínima (inclusive) em que este pool se aplica. Camada 0 é o nó inicial.")]
+        public int MinLayer;
+        [Tooltip("Camada máxima (inclusive) em que este pool se aplica.")]
+        public int MaxLayer;
+        public Level.LevelPool Pool;
     }
     [ExecuteAlways]
     public class MapVisualController : MonoBehaviour
@@ -42,9 +45,9 @@ namespace RoguelikeMap
         [Tooltip("Sprite usado em qualquer nó bloqueado (cadeado). Arraste aqui uma única vez.")]
         public Sprite lockedNodeSprite;
 
-        [Header("Cenas por tipo de nó")]
-        [Tooltip("Nome exato da cena (deve estar em Build Settings > Scenes In Build)")]
-        public List<NodeTypeScene> nodeScenes = new List<NodeTypeScene>();
+        [Header("Fases por tipo de nó e camada")]
+        [Tooltip("Cada entrada cobre um Tipo + faixa de camadas. Ao clicar num nó, o GameManager sorteia uma fase dentro do LevelPool correspondente e carrega a cena. Entradas não podem se sobrepor para o mesmo tipo.")]
+        public List<NodeTypeLayerPool> nodeLayerPools = new List<NodeTypeLayerPool>();
 
         [Header("Linhas")]
         [Tooltip("Material das linhas PERCORRIDAS (sólidas). Se vazio, usa um material branco gerado automaticamente.")]
@@ -71,8 +74,6 @@ namespace RoguelikeMap
         [Range(0.4f, 1f)]
         [Tooltip("Quanto da tela o grafo deve preencher. 0.8 = grafo ocupa 80%, sobrando 20% de respiro nas bordas.")]
         public float viewportFillPercent = 0.8f;
-
-        // --- Estado de progressão (em memória, reseta ao recarregar a cena) ---
         private MapData currentMap;
         private Dictionary<int, GameObject> spawnedNodes;
         private readonly List<int> visitedPath = new List<int>();
@@ -94,7 +95,7 @@ namespace RoguelikeMap
 
             currentMap = map;
             spawnedNodes = spawned;
-            visitedPath.Clear(); // nada visitado ainda — nó inicial nasce Available, exige clique
+            visitedPath.Clear();
             RefreshMapVisuals();
 
             if (fitCameraToMap) FitCamera(bounds);
@@ -252,8 +253,6 @@ namespace RoguelikeMap
             return b;
         }
 
-        // --- Progressão ---
-
         public NodeProgressState GetNodeState(int nodeId)
         {
             if (currentMap == null) return NodeProgressState.Locked;
@@ -295,14 +294,28 @@ namespace RoguelikeMap
             var node = currentMap?.Nodes.FirstOrDefault(n => n.Id == nodeId);
             if (node == null) return;
 
-            var mapping = nodeScenes.FirstOrDefault(s => s.Type == node.Type);
-            if (string.IsNullOrEmpty(mapping.SceneName))
+            var matches = nodeLayerPools
+                .Where(s => s.Type == node.Type && node.Layer >= s.MinLayer && node.Layer <= s.MaxLayer)
+                .ToList();
+
+            if (matches.Count == 0)
             {
-                Debug.LogWarning($"Nenhuma cena configurada para o tipo {node.Type}.");
+                Debug.LogWarning($"Nenhum LevelPool configurado para {node.Type} na camada {node.Layer}.");
+                return;
+            }
+            if (matches.Count > 1)
+            {
+                Debug.LogWarning($"Mais de um LevelPool cobre {node.Type} na camada {node.Layer} — usando o primeiro encontrado. Confira sobreposições em Node Layer Pools.");
+            }
+
+            var pool = matches[0].Pool;
+            if (pool == null)
+            {
+                Debug.LogWarning($"A entrada para {node.Type} na camada {node.Layer} não tem um LevelPool atribuído.");
                 return;
             }
 
-            SceneManager.LoadScene(mapping.SceneName);
+            GameManager.Instance.StartLevel(pool);
         }
 
         private void RefreshMapVisuals()
