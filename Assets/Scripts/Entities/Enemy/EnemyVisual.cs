@@ -9,9 +9,9 @@ namespace Entities
 
         private EnemyDataSO enemyDataSO;
         
-        private SpriteRenderer _spriteRenderer;
-        private bool _isIdle1 = true;
-        private int _holdPoseTicks = 0;
+        private SpriteRenderer spriteRenderer;
+        private bool idleToggle = true;
+        private bool holdPose = false;
 
         private EventBinding<Tick> _tickBinding;
         private EventBinding<ActionExecutedEvent> _actionBinding;
@@ -19,7 +19,7 @@ namespace Entities
         private void Awake()
         {
             Entity = GetComponent<Entity>();
-            _spriteRenderer = GetComponent<SpriteRenderer>();
+            spriteRenderer = GetComponent<SpriteRenderer>();
         }
 
         public void InitializeData(EnemyDataSO data)
@@ -44,30 +44,31 @@ namespace Entities
 
         private void OnTick()
         {
-            if (_holdPoseTicks > 0)
+            if(Entity.IsDead) spriteRenderer.sprite = enemyDataSO.death;
+            
+            if (holdPose)
             {
-                _holdPoseTicks--;
+                holdPose = false;
                 return;
             }
 
-            _isIdle1 = !_isIdle1;
-            _spriteRenderer.sprite = _isIdle1 ? enemyDataSO.idle1 : enemyDataSO.idle2;
+            idleToggle = !idleToggle;
+            spriteRenderer.sprite = idleToggle ? enemyDataSO.idle1 : enemyDataSO.idle2;
         }
 
         private void OnActionExecuted(ActionExecutedEvent eventData)
         {
             if (eventData.Caster != Entity) return;
-            
-            if (eventData.SkillType == SkillType.Attack)
+
+            spriteRenderer.sprite = eventData.SkillType switch
             {
-                _spriteRenderer.sprite = enemyDataSO.attack;
-            }
-            else if (eventData.SkillType == SkillType.Defend)
-            {
-                _spriteRenderer.sprite = enemyDataSO.defend;
-            }
-            
-            _holdPoseTicks = 1;
+                SkillType.Attack => enemyDataSO.attack,
+                SkillType.Defend => enemyDataSO.defend,
+                SkillType.Reload => enemyDataSO.reload,
+                _ => spriteRenderer.sprite
+            };
+
+            holdPose = true;
         }
         
         public void SelectedAsTarget()

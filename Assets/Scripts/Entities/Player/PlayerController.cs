@@ -6,9 +6,8 @@ namespace Entities
     public class PlayerController : MonoBehaviour
     {
         private Entity self;
-
-        //TODO: Fazer uma versão unica disso no GameManager
-        [SerializeField] private EntityData playerStats;
+        
+        private EntityData playerStats;
         
         private Skill reload;
         private Skill attack;
@@ -19,7 +18,7 @@ namespace Entities
         {
             self = GetComponent<Entity>();
             self.IsPlayer = true;
-            
+            playerStats = GameManager.Instance.PlayerStats;
             SetSkills();
         }
 

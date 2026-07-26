@@ -11,5 +11,5 @@ public class EnemyDataSO : ScriptableObject
     public Sprite attack;
     public Sprite defend;
     public Sprite reload;
-    public Sprite heal;
+    public Sprite death;
 }
