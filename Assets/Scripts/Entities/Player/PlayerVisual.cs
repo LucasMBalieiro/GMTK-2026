@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -39,6 +41,21 @@ namespace Entities
         [Header("Reload overlay")]
         [SerializeField] private Button reloadButton;
         
+        [Header("Defend Animation")]
+        [SerializeField] private SpriteRenderer defendRenderer; 
+        [SerializeField] private Sprite[] defendSprites;
+
+        [Header("Reload Animation")]
+        [SerializeField] private SpriteRenderer reloadRenderer;
+        [SerializeField] private SpriteRenderer gunRenderer;
+        
+        [SerializeField] private Sprite[] reloadSprites;
+
+        [Space]
+        [SerializeField] private float framesPerSecond = 12f;
+
+        private EventBinding<ActionExecutedEvent> _actionBinding;
+        
         private List<SpriteRenderer> spawnedHearts = new List<SpriteRenderer>();
         private List<SpriteRenderer> spawnedBullets = new List<SpriteRenderer>();
         
@@ -62,6 +79,9 @@ namespace Entities
         {
             resetBinding = new EventBinding<ResetConditions>(RefreshUI); 
             EventBus<ResetConditions>.Register(resetBinding); 
+            
+            _actionBinding = new EventBinding<ActionExecutedEvent>(OnActionExecuted);
+            EventBus<ActionExecutedEvent>.Register(_actionBinding);
 
             controller.UpdateVisual += InitialUI;
         }
@@ -69,7 +89,60 @@ namespace Entities
         private void OnDisable()
         {
             EventBus<ResetConditions>.Deregister(resetBinding); 
+            
+            EventBus<ActionExecutedEvent>.Deregister(_actionBinding);
             controller.UpdateVisual -= InitialUI; 
+        }
+        
+        private void OnActionExecuted(ActionExecutedEvent eventData)
+        {
+            // Ignore if an enemy is doing the action
+            if (eventData.Caster != player) return;
+
+            SpriteRenderer targetRenderer = null;
+            Sprite[] actionSequence = null;
+
+            // Route both the renderer and the animation sequence
+            switch (eventData.SkillType)
+            {
+                case SkillType.Defend:
+                    targetRenderer = defendRenderer;
+                    actionSequence = defendSprites;
+                    break;
+                case SkillType.Reload:
+                    targetRenderer = reloadRenderer;
+                    actionSequence = reloadSprites;
+                    break;
+            }
+
+            // Make sure we have both a valid renderer and sprites before playing
+            if (targetRenderer != null && actionSequence != null && actionSequence.Length > 0)
+            {
+                PlayActionSequence(targetRenderer, actionSequence, targetRenderer == reloadRenderer).Forget(); 
+            }
+        }
+
+        private async UniTaskVoid PlayActionSequence(SpriteRenderer targetRenderer, Sprite[] sprites, bool isGun)
+        {
+            // 1. Enable the specific renderer before starting
+            if(isGun) gunRenderer.enabled = false;
+            
+            targetRenderer.enabled = true;
+
+            // 2. Calculate the delay
+            float frameDelay = 1f / framesPerSecond;
+
+            // 3. Loop through every sprite in the array
+            for (int i = 0; i < sprites.Length; i++)
+            {
+                targetRenderer.sprite = sprites[i];
+        
+                await UniTask.Delay(TimeSpan.FromSeconds(frameDelay), cancellationToken: this.GetCancellationTokenOnDestroy());
+            }
+
+            // 4. Disable the specific renderer once the sequence finishes
+            if(isGun) gunRenderer.enabled = true;
+            targetRenderer.enabled = false;
         }
 
         private void InitialUI()
