@@ -1,11 +1,12 @@
 using System.Collections.Generic;
+using AudioSystem;
 using Entities;
 using Level;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityUtils;
 
-public class GameManager : Singleton<GameManager>
+public class GameManager : MonoBehaviour
 {
     [SerializeField] private EntityData playerStats;
 
@@ -15,6 +16,47 @@ public class GameManager : Singleton<GameManager>
     private readonly List<int> mapProgress = new List<int>();
     public IReadOnlyList<int> MapProgress => mapProgress;
 
+    public static GameManager Instance { get; private set; }
+    
+    [SerializeField] private SoundData musicData;
+    private SoundEmitter musicEmitter;
+    private bool musicPlaying;
+    
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
+    
+    private void Start()
+    {
+        PlayMusic();
+    }
+    
+    private void PlayMusic()
+    {
+        musicEmitter = SoundManager.Instance.CreateSound().PlayOnSoundEmitter(musicData);
+    }
+    
+    public void ToggleMusic()
+    {
+        if (musicPlaying)
+        {
+            musicEmitter.Stop();
+            musicPlaying = false;
+        }
+        else
+        {
+            musicEmitter.Play();
+            musicPlaying = true;
+        }
+    }
+    
     public void SetLevelData(LevelData levelData)
     {
         LevelData = levelData;
