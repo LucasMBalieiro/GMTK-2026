@@ -52,12 +52,15 @@ namespace Entities
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            if (playerEntity.CurrentAmmo <= 0) return;
-            
+            // 1. ALWAYS restore the UI state first when the drag ends
             transform.position = originalPosition;
             image.sprite = startingSprite;
             text.color = new Color(text.color.r, text.color.g, text.color.b, 1f);
             Cursor.visible = true;
+            image.raycastTarget = true;
+            
+            // 2. NOW block the actual combat logic if there is no ammo
+            if (playerEntity.CurrentAmmo <= 0) return;
             
             Vector2 mousePosition2D = mainCamera.ScreenToWorldPoint(eventData.position);
         
@@ -76,8 +79,6 @@ namespace Entities
                     }
                 }
             }
-            
-            image.raycastTarget = true;
         }
 
         public void OnPointerEnter(PointerEventData eventData)

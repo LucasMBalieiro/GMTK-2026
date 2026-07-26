@@ -62,13 +62,21 @@ public class GameManager : MonoBehaviour
         playerStats.maxHealth = 3;
         playerStats.maxAmmo = 1;
         playerStats.reloadAmount = 1;
+        playerStats.startingAmmo = 1;
     }
     
     public void UpgradePlayer()
     {
+        
         playerStats.maxHealth += 1;
-        playerStats.maxAmmo += 1;
-        playerStats.reloadAmount += 1;
+
+        if (playerStats.maxAmmo < 3)
+        {
+            playerStats.maxAmmo += 1;
+            playerStats.reloadAmount += 1;
+            playerStats.startingAmmo += 1;
+        }
+        
     }
     
     public void SetLevelData(LevelData levelData)

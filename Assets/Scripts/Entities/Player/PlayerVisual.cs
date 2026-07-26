@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
@@ -66,6 +67,9 @@ namespace Entities
         private float healAlpha = 0f;
         [SerializeField] private float fadeSpeed = 2f; 
         
+        // 1. Add a CancellationTokenSource to track the active animation
+        private CancellationTokenSource _animationCts;
+
         private void Awake()
         {
             player = GetComponent<Entity>();
@@ -92,17 +96,19 @@ namespace Entities
             
             EventBus<ActionExecutedEvent>.Deregister(_actionBinding);
             controller.UpdateVisual -= InitialUI; 
+            
+            // Clean up the token when the component is disabled
+            _animationCts?.Cancel();
+            _animationCts?.Dispose();
         }
         
         private void OnActionExecuted(ActionExecutedEvent eventData)
         {
-            // Ignore if an enemy is doing the action
             if (eventData.Caster != player) return;
 
             SpriteRenderer targetRenderer = null;
             Sprite[] actionSequence = null;
 
-            // Route both the renderer and the animation sequence
             switch (eventData.SkillType)
             {
                 case SkillType.Defend:
@@ -115,38 +121,64 @@ namespace Entities
                     break;
             }
 
-            // Make sure we have both a valid renderer and sprites before playing
             if (targetRenderer != null && actionSequence != null && actionSequence.Length > 0)
             {
-                PlayActionSequence(targetRenderer, actionSequence, targetRenderer == reloadRenderer).Forget(); 
+                // 2. Cancel the previous animation if it is still running
+                _animationCts?.Cancel();
+                _animationCts = new CancellationTokenSource();
+                
+                // Link our animation cancellation with Unity's destruction lifecycle
+                CancellationToken linkedToken = CancellationTokenSource.CreateLinkedTokenSource(
+                    _animationCts.Token, 
+                    this.GetCancellationTokenOnDestroy()
+                ).Token;
+
+                PlayActionSequence(targetRenderer, actionSequence, targetRenderer == reloadRenderer, linkedToken).Forget(); 
             }
         }
 
-        private async UniTaskVoid PlayActionSequence(SpriteRenderer targetRenderer, Sprite[] sprites, bool isGun)
+        private async UniTaskVoid PlayActionSequence(SpriteRenderer targetRenderer, Sprite[] sprites, bool isGun, CancellationToken token)
         {
-            // 1. Enable the specific renderer before starting
-            if(isGun) gunRenderer.enabled = false;
-            
-            targetRenderer.enabled = true;
-
-            // 2. Calculate the delay
-            float frameDelay = 1f / framesPerSecond;
-
-            // 3. Loop through every sprite in the array
-            for (int i = 0; i < sprites.Length; i++)
+            try
             {
-                targetRenderer.sprite = sprites[i];
-        
-                await UniTask.Delay(TimeSpan.FromSeconds(frameDelay), cancellationToken: this.GetCancellationTokenOnDestroy());
-            }
+                if(isGun) gunRenderer.enabled = false;
+                targetRenderer.enabled = true;
 
-            // 4. Disable the specific renderer once the sequence finishes
-            if(isGun) gunRenderer.enabled = true;
-            targetRenderer.enabled = false;
+                float frameDelay = 1f / framesPerSecond;
+
+                for (int i = 0; i < sprites.Length; i++)
+                {
+                    targetRenderer.sprite = sprites[i];
+                    
+                    // 3. Pass the token into the delay
+                    await UniTask.Delay(TimeSpan.FromSeconds(frameDelay), cancellationToken: token);
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                // 4. Silently catch the cancellation so it doesn't throw a console error when interrupted
+            }
+            finally
+            {
+                // 5. The finally block guarantees the renderers are reset, even if the animation was cancelled mid-way!
+                if (targetRenderer != null) targetRenderer.enabled = false;
+                if (isGun && gunRenderer != null) gunRenderer.enabled = true;
+            }
         }
 
         private void InitialUI()
         {
+            // 1. Destroy the actual GameObjects in the scene first
+            foreach (var heart in spawnedHearts)
+            {
+                if (heart != null) Destroy(heart.gameObject);
+            }
+            foreach (var bullet in spawnedBullets)
+            {
+                if (bullet != null) Destroy(bullet.gameObject);
+            }
+
+            // 2. Now it is safe to clear the reference lists
             spawnedHearts.Clear();
             spawnedBullets.Clear();
 

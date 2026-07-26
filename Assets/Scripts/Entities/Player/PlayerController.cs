@@ -25,9 +25,13 @@ namespace Entities
             
             self.InitializeData(playerStats);
             
-            UpdateVisual?.Invoke();
-            
             SetSkills();
+        }
+
+        private void Start()
+        {
+            // Moved here so PlayerVisual's OnEnable has time to subscribe first!
+            UpdateVisual?.Invoke();
         }
 
         private void SetSkills()
@@ -36,7 +40,6 @@ namespace Entities
             attack = new Skill(SkillType.Attack, playerStats.attackDamage);
             reload = new Skill(SkillType.Reload, self, playerStats.reloadAmount);
             heal = new Skill(SkillType.Heal, self, self.data.maxHealth);
-            
         }
 
         public void Reload()

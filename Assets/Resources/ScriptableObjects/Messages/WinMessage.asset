@@ -16,7 +16,7 @@ MonoBehaviour:
   message: 'This time you were the quickest draw, you may live another day.
 
     You
-    gain one extra health'
+    gain extra stats.'
   contentImage: {fileID: 0}
   layout: 0
   confirmText: Return to Map

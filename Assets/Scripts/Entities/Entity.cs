@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+
 namespace Entities
 {
     public struct AttackBlockedEvent : IEvent
@@ -33,20 +34,25 @@ namespace Entities
             CurrentHealth = data.maxHealth;
             CurrentAmmo = data.startingAmmo;
         }
+
         private void OnEnable()
         {
-            resetBinding = new EventBinding<ResetConditions>(ResetConditions);
+            // Point the binding to the newly renamed method
+            resetBinding = new EventBinding<ResetConditions>(OnResetConditions);
             EventBus<ResetConditions>.Register(resetBinding);
         }
+
         private void OnDisable()
         {
             EventBus<ResetConditions>.Deregister(resetBinding);
         }
+
         public void Defend()
         {
             Debug.Log($"{gameObject.name} defend");
             isDefending = true;
         }
+
         public void TakeDamage(int amount)
         {
             if (isDefending)
@@ -66,6 +72,7 @@ namespace Entities
             }
             canHeal = false;
         }
+
         public void Reload(int amount)
         {
             Debug.Log($"{gameObject.name} reload");
@@ -77,6 +84,7 @@ namespace Entities
             CurrentAmmo = Mathf.Max(0, CurrentAmmo - amount);
             Debug.Log($"{gameObject.name} consumed {amount} ammo. Ammo left: {CurrentAmmo}");
         }
+
         public void Heal(int amount)
         {
             if (canHeal)
@@ -90,7 +98,9 @@ namespace Entities
                 EventBus<HealInterruptedEvent>.Raise(new HealInterruptedEvent { Target = this });
             }
         }
-        private void ResetConditions()
+
+        // Renamed to avoid colliding with the ResetConditions struct
+        private void OnResetConditions()
         {
             canHeal = true;
             isDefending = false;
