@@ -149,8 +149,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkillSoundController
   soundEffects:
+  - Type: 3
+    Sound: {fileID: 11400000, guid: 1e3919a264643adbab50f6b9f0cc4fc4, type: 2}
   - Type: 0
-    Sound: {fileID: 0}
+    Sound: {fileID: 11400000, guid: 5c67c611cfb316043b33e0791a17dc0f, type: 2}
 --- !u!4 &48488639
 Transform:
   m_ObjectHideFlags: 0
