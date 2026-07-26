@@ -1,62 +1,47 @@
-using AudioSystem;
+using System.Collections.Generic;
 using Entities;
 using Level;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityUtils;
 
-public class GameManager : MonoBehaviour
+public class GameManager : Singleton<GameManager>
 {
     [SerializeField] private EntityData playerStats;
-    [SerializeField] private SoundData musicData;
-    
+
     public EntityData PlayerStats => playerStats;
+
     public LevelData LevelData { get; private set; }
-
-    public static GameManager Instance { get; private set; }
-    
-    private SoundEmitter musicEmitter;
-    private bool musicPlaying;
-    
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
-    }
-
-    private void Start()
-    {
-        PlayMusic();
-    }
-
-    private void PlayMusic()
-    {
-        musicEmitter = SoundManager.Instance.CreateSound().PlayOnSoundEmitter(musicData);
-    }
-
-    public void ToggleMusic()
-    {
-        if (musicPlaying)
-        {
-            musicEmitter.Stop();
-            musicPlaying = false;
-        }
-        else
-        {
-            musicEmitter.Play();
-            musicPlaying = true;
-        }
-    }
+    private readonly List<int> mapProgress = new List<int>();
+    public IReadOnlyList<int> MapProgress => mapProgress;
 
     public void SetLevelData(LevelData levelData)
     {
         LevelData = levelData;
     }
+
+    /// <summary>
+    /// Guarda o caminho de nós já visitados no mapa atual, para o MapVisualController
+    /// restaurar isso ao recarregar a cena do Mapa (ex: voltando do Combate).
+    /// </summary>
+    public void SetMapProgress(IEnumerable<int> visitedNodeIds)
+    {
+        mapProgress.Clear();
+        mapProgress.AddRange(visitedNodeIds);
+    }
+
+    /// <summary>
+    /// Zera o progresso do mapa. Chamar ao iniciar uma run nova (ex: botão Jogar do Menu).
+    /// </summary>
+    public void ResetMapProgress()
+    {
+        mapProgress.Clear();
+    }
+
+    /// <summary>
+    /// Sorteia uma das fases possíveis do pool, guarda o LevelData escolhido
+    /// (para a cena de combate consultar depois) e carrega a cena correspondente.
+    /// </summary>
     public void StartLevel(LevelPool pool)
     {
         if (pool == null || pool.phases == null || pool.phases.Count == 0)

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: LevelData
   m_EditorClassIdentifier: Assembly-CSharp::Level.LevelData
   enemies:
-  - {fileID: 11400000, guid: 8f2991b2f40f627a696e00b571199df8, type: 2}
-  - {fileID: 11400000, guid: 8f2991b2f40f627a696e00b571199df8, type: 2}
-  - {fileID: 11400000, guid: 8f2991b2f40f627a696e00b571199df8, type: 2}
+  - {fileID: 11400000, guid: 1922bbfdf91865a4589a3ba693d93fc7, type: 2}
+  - {fileID: 11400000, guid: 1922bbfdf91865a4589a3ba693d93fc7, type: 2}
+  - {fileID: 11400000, guid: 1922bbfdf91865a4589a3ba693d93fc7, type: 2}
   coinsOnWin: 0

@@ -22,15 +22,17 @@ namespace AudioSystem
     
         private void Start()
         {
-            audioMixer.GetFloat("MasterVolume", out float masterVolume);
-            audioMixer.GetFloat("MusicVolume", out float musicVolume);
-            audioMixer.GetFloat("SFXVolume", out float sfxVolume);
-            audioMixer.GetFloat("UIVolume", out float uiVolume);
-        
-            masterSlider.value = ConversionUtils.DBToFloat(masterVolume);
-            musicSlider.value = ConversionUtils.DBToFloat(musicVolume);
-            sfxSlider.value = ConversionUtils.DBToFloat(sfxVolume);
-            uiSlider.value = ConversionUtils.DBToFloat(uiVolume);
+            if (masterSlider != null && audioMixer.GetFloat("MasterVolume", out float masterVolume))
+                masterSlider.value = ConversionUtils.DBToFloat(masterVolume);
+
+            if (musicSlider != null && audioMixer.GetFloat("MusicVolume", out float musicVolume))
+                musicSlider.value = ConversionUtils.DBToFloat(musicVolume);
+
+            if (sfxSlider != null && audioMixer.GetFloat("SFXVolume", out float sfxVolume))
+                sfxSlider.value = ConversionUtils.DBToFloat(sfxVolume);
+
+            if (uiSlider != null && audioMixer.GetFloat("UIVolume", out float uiVolume))
+                uiSlider.value = ConversionUtils.DBToFloat(uiVolume);
         }
         
         public void OnMasterChange(float volume) => audioMixer.SetFloat("MasterVolume", ConversionUtils.FloatToDB(volume));

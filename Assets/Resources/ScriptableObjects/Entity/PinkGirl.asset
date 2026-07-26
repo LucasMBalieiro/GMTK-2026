@@ -15,7 +15,7 @@ MonoBehaviour:
   data:
     maxHealth: 2
     maxAmmo: 1
-    startingAmmo: 0
+    startingAmmo: 1
     attackDamage: 1
     reloadAmount: 1
     defencesInSequence: 3

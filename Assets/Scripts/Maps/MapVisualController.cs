@@ -74,6 +74,8 @@ namespace RoguelikeMap
         [Range(0.4f, 1f)]
         [Tooltip("Quanto da tela o grafo deve preencher. 0.8 = grafo ocupa 80%, sobrando 20% de respiro nas bordas.")]
         public float viewportFillPercent = 0.8f;
+
+        // --- Estado de progressão (em memória, reseta ao recarregar a cena) ---
         private MapData currentMap;
         private Dictionary<int, GameObject> spawnedNodes;
         private readonly List<int> visitedPath = new List<int>();
@@ -95,7 +97,11 @@ namespace RoguelikeMap
 
             currentMap = map;
             spawnedNodes = spawned;
+
             visitedPath.Clear();
+            if (Application.isPlaying && GameManager.Instance != null && GameManager.Instance.MapProgress.Count > 0)
+                visitedPath.AddRange(GameManager.Instance.MapProgress);
+
             RefreshMapVisuals();
 
             if (fitCameraToMap) FitCamera(bounds);
@@ -253,6 +259,8 @@ namespace RoguelikeMap
             return b;
         }
 
+        // --- Progressão ---
+
         public NodeProgressState GetNodeState(int nodeId)
         {
             if (currentMap == null) return NodeProgressState.Locked;
@@ -282,6 +290,9 @@ namespace RoguelikeMap
             }
 
             visitedPath.Add(nodeId);
+            if (Application.isPlaying && GameManager.Instance != null)
+                GameManager.Instance.SetMapProgress(visitedPath);
+
             RefreshMapVisuals();
             OnNodeSelected(nodeId);
             return true;

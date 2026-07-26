@@ -17,6 +17,7 @@ public class MainMenuController : MonoBehaviour
             optionsPanel.SetActive(false);
     }
 
+    // Ligar no botão "Jogar"
     public void OnPlayPressed()
     {
         if (string.IsNullOrEmpty(mapSceneName))
@@ -24,10 +25,14 @@ public class MainMenuController : MonoBehaviour
             Debug.LogWarning("MainMenuController: Map Scene Name não configurado.");
             return;
         }
+
+        if (GameManager.Instance != null)
+            GameManager.Instance.ResetMapProgress();
+
         SceneManager.LoadScene(mapSceneName);
     }
 
-
+    // Ligar no botão "Opções"
     public void OnOptionsPressed()
     {
         if (optionsPanel == null)
@@ -38,14 +43,14 @@ public class MainMenuController : MonoBehaviour
         optionsPanel.SetActive(true);
     }
 
- 
+    // Ligar no botão "Fechar"/"Voltar" dentro do painel de Opções
     public void OnCloseOptionsPressed()
     {
         if (optionsPanel != null)
             optionsPanel.SetActive(false);
     }
 
-  
+    // Ligar no botão "Sair"
     public void OnQuitPressed()
     {
 #if UNITY_EDITOR

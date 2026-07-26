@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b419e1f9f93678a38f3b289820d2685, type: 3}
+  m_Name: Pexe
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyDataSO
+  data:
+    maxHealth: 5
+    maxAmmo: 4
+    startingAmmo: 1
+    attackDamage: 1
+    reloadAmount: 1
+    defencesInSequence: 2
+  idle1: {fileID: 5106315001416873370, guid: ae52163eec928b24ba24f703b55d4fa6, type: 3}
+  idle2: {fileID: -5255968858289642490, guid: ae52163eec928b24ba24f703b55d4fa6, type: 3}
+  attack: {fileID: -5645142590061171265, guid: ae52163eec928b24ba24f703b55d4fa6, type: 3}
+  defend: {fileID: 4033839431280842356, guid: ae52163eec928b24ba24f703b55d4fa6, type: 3}
+  reload: {fileID: 4655794414627202203, guid: ae52163eec928b24ba24f703b55d4fa6, type: 3}
+  death: {fileID: 21300000, guid: 71c5f30bcc900884293bc289c0dc5593, type: 3}
