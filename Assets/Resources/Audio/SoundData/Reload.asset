@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 290a1ddd808dd234ba151d61c677dfe5, type: 3}
   m_Name: Reload
   m_EditorClassIdentifier: AudioSystem::AudioSystem.SoundData
-  audioClip: {fileID: 0}
-  audioMixerGroup: {fileID: 0}
+  audioClip: {fileID: 8300000, guid: 80060df834ea98b448cc495c58c1fab3, type: 3}
+  audioMixerGroup: {fileID: -8909758718914616196, guid: 06e3dc53df401724a99ad836b15e51f5, type: 2}
   frequentSound: 0
   loop: 0
   pitch: 1

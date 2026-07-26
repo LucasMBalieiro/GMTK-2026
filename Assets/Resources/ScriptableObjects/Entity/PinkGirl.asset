@@ -24,4 +24,4 @@ MonoBehaviour:
   attack: {fileID: 6403119193784978028, guid: d758af597af5366c2b366f237fcd26cf, type: 3}
   defend: {fileID: 8031110639372960824, guid: d758af597af5366c2b366f237fcd26cf, type: 3}
   reload: {fileID: -7681638456265086339, guid: a7bc12d0474c25238830e2e34cb75820, type: 3}
-  heal: {fileID: 0}
+  death: {fileID: 21300000, guid: 1ef6a3ad15e496fcfb9865fc9565c0cf, type: 3}

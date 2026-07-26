@@ -1,16 +1,18 @@
+using Entities;
+using Level;
 using UnityEngine;
+using UnityUtils;
 
-public class GameManager : MonoBehaviour
+public class GameManager : Singleton<GameManager>
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    [SerializeField] private EntityData playerStats;
+    
+    public EntityData PlayerStats => playerStats;
 
-    // Update is called once per frame
-    void Update()
+    public LevelData LevelData { get; private set; }
+
+    public void SetLevelData(LevelData levelData)
     {
-        
+        LevelData = levelData;
     }
 }
