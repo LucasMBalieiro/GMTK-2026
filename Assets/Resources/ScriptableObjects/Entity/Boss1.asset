@@ -19,9 +19,9 @@ MonoBehaviour:
     attackDamage: 1
     reloadAmount: 2
     defencesInSequence: 2
-  idle1: {fileID: -7554258993688776919, guid: 4035be383e42f814390907b17e021106, type: 3}
-  idle2: {fileID: -6582037944345362269, guid: 4035be383e42f814390907b17e021106, type: 3}
-  attack: {fileID: -4629645560843304968, guid: 4035be383e42f814390907b17e021106, type: 3}
-  defend: {fileID: 2937807144519195449, guid: 4035be383e42f814390907b17e021106, type: 3}
-  reload: {fileID: 1911495805703474862, guid: 4035be383e42f814390907b17e021106, type: 3}
+  idle1: {fileID: 6592608278268331941, guid: 5e634881a24b07b4ca82c6d6b5385acf, type: 3}
+  idle2: {fileID: -8103482865681851516, guid: 5e634881a24b07b4ca82c6d6b5385acf, type: 3}
+  attack: {fileID: -4705953615012266627, guid: 5e634881a24b07b4ca82c6d6b5385acf, type: 3}
+  defend: {fileID: 8186746085372206978, guid: 5e634881a24b07b4ca82c6d6b5385acf, type: 3}
+  reload: {fileID: 1609278180875736101, guid: 5e634881a24b07b4ca82c6d6b5385acf, type: 3}
   death: {fileID: 21300000, guid: 1ef6a3ad15e496fcfb9865fc9565c0cf, type: 3}

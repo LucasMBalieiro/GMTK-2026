@@ -8,7 +8,6 @@ namespace RoguelikeMap
     public enum NodeType
     {
         Combat,
-        Shop,
         Boss
     }
 
@@ -40,7 +39,6 @@ namespace RoguelikeMap
     }
     public static class MapGenerator
     {
-        private const float ShopChance = 0.2f;   
         private const float LayerSpacing = 2.5f;  
         private const float NodeSpacing = 2f;   
         public static int GenerateLevelSeed(int levelIndex, int globalSeed)
@@ -127,7 +125,7 @@ namespace RoguelikeMap
 
         private static NodeType PickNodeType(System.Random rng)
         {
-            return rng.NextDouble() < ShopChance ? NodeType.Shop : NodeType.Combat;
+            return NodeType.Combat;
         }
         private static void ConnectLayers(MapData data, int layerIndex, System.Random rng)
         {

@@ -10,10 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e6cc191750e98cc18805e3af3893d7a4, type: 3}
-  m_Name: LevelData
+  m_Name: Level4
   m_EditorClassIdentifier: Assembly-CSharp::Level.LevelData
   enemies:
   - {fileID: 11400000, guid: 1922bbfdf91865a4589a3ba693d93fc7, type: 2}
-  - {fileID: 11400000, guid: 1922bbfdf91865a4589a3ba693d93fc7, type: 2}
-  - {fileID: 11400000, guid: 1922bbfdf91865a4589a3ba693d93fc7, type: 2}
+  - {fileID: 11400000, guid: 22cdeb191e5cf52409c05334acd229f4, type: 2}
   coinsOnWin: 0
