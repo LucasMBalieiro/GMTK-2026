@@ -1,5 +1,5 @@
 using System;
-using TMPro;
+using System.Collections.Generic; // Required for List<>
 using UnityEngine;
 
 namespace Entities
@@ -10,51 +10,76 @@ namespace Entities
         private Entity player;
         private PlayerController controller;
 
-        [SerializeField] private TextMeshProUGUI healthText;
-        [SerializeField] private TextMeshProUGUI bulletText;
+        [SerializeField] private SpriteRenderer heartPrefab;
+        [SerializeField] private SpriteRenderer bulletPrefab;
+
+        [SerializeField] private Transform heartParent;
+        [SerializeField] private Transform bulletParent;
+        
+        [SerializeField] private Sprite heartFull;
+        [SerializeField] private Sprite heartEmpty;
+        [SerializeField] private Sprite bulletFull;
+        [SerializeField] private Sprite bulletEmpty;
+        
+        private List<SpriteRenderer> spawnedHearts = new List<SpriteRenderer>();
+        private List<SpriteRenderer> spawnedBullets = new List<SpriteRenderer>();
         
         private EventBinding<ResetConditions> resetBinding;
         
         private void Awake()
         {
             player = GetComponent<Entity>();
-            controller = GetComponent<PlayerController>();
+            controller = GetComponent<PlayerController>(); 
         }
 
         private void OnEnable()
         {
-            resetBinding = new EventBinding<ResetConditions>(RefreshUI);
-            EventBus<ResetConditions>.Register(resetBinding);
+            resetBinding = new EventBinding<ResetConditions>(RefreshUI); 
+            EventBus<ResetConditions>.Register(resetBinding); 
 
             controller.UpdateVisual += InitialUI;
         }
 
         private void OnDisable()
         {
-            EventBus<ResetConditions>.Deregister(resetBinding);
+            EventBus<ResetConditions>.Deregister(resetBinding); 
             
-            controller.UpdateVisual -= InitialUI;
+            controller.UpdateVisual -= InitialUI; 
         }
-
 
         private void InitialUI()
         {
-            if (healthText == null || bulletText == null)
+            spawnedHearts.Clear();
+            spawnedBullets.Clear();
+
+            for (int i = 0; i < player.data.maxHealth; i++)
             {
-                Debug.LogError($"[{gameObject.name}] UI Text references are missing in the Inspector!", this);
-                return;
+                SpriteRenderer heart = Instantiate(heartPrefab, heartParent);
+                heart.transform.localPosition = new Vector3(23f + (i * 14f), 0f, 0f); 
+                spawnedHearts.Add(heart);
             }
 
-            healthText.text = $"Health: {player.data.maxHealth}/{player.data.maxHealth}";
-            bulletText.text = $"Bullet {player.data.startingAmmo}/{player.data.maxAmmo}";
+            for (int i = 0; i < player.data.maxAmmo; i++)
+            {
+                SpriteRenderer bullet = Instantiate(bulletPrefab, bulletParent);
+                bullet.transform.localPosition = new Vector3(21f + (i * 14f), 15f, 0f); 
+                spawnedBullets.Add(bullet);
+            }
+
+            RefreshUI();
         }
 
         private void RefreshUI()
         {
-            if (healthText == null || bulletText == null) return;
-            
-            healthText.text = $"Health: {player.CurrentHealth}/{player.data.maxHealth}";
-            bulletText.text = $"Bullet {player.CurrentAmmo}/{player.data.maxAmmo}";
+            for (int i = 0; i < spawnedHearts.Count; i++)
+            {
+                spawnedHearts[i].sprite = i < player.CurrentHealth ? heartFull : heartEmpty;
+            }
+
+            for (int i = 0; i < spawnedBullets.Count; i++)
+            {
+                spawnedBullets[i].sprite = i < player.CurrentAmmo ? bulletFull : bulletEmpty;
+            }
         }
     }
 }
