@@ -13,6 +13,9 @@ namespace Entities
         private bool idleToggle = true;
         private bool holdPose = false;
 
+        [SerializeField] private EnemyIconGrid healthGrid;
+        [SerializeField] private EnemyIconGrid ammoGrid;
+
         private EventBinding<Tick> _tickBinding;
         private EventBinding<ActionExecutedEvent> _actionBinding;
 
@@ -34,18 +37,20 @@ namespace Entities
 
             _actionBinding = new EventBinding<ActionExecutedEvent>(OnActionExecuted);
             EventBus<ActionExecutedEvent>.Register(_actionBinding);
+
+            Entity.OnDeath += HandleDeath;
         }
 
         private void OnDisable()
         {
             EventBus<Tick>.Deregister(_tickBinding);
             EventBus<ActionExecutedEvent>.Deregister(_actionBinding);
+
+            Entity.OnDeath -= HandleDeath;
         }
 
         private void OnTick()
         {
-            if(Entity.IsDead) spriteRenderer.sprite = enemyDataSO.death;
-            
             if (holdPose)
             {
                 holdPose = false;
@@ -69,6 +74,20 @@ namespace Entities
             };
 
             holdPose = true;
+        }
+
+        private void HandleDeath()
+        {
+            if (enemyDataSO.death != null)
+            {
+                spriteRenderer.sprite = enemyDataSO.death;
+            }
+
+            healthGrid.gameObject.SetActive(false);
+            ammoGrid.gameObject.SetActive(false);
+
+            EventBus<Tick>.Deregister(_tickBinding);
+            EventBus<ActionExecutedEvent>.Deregister(_actionBinding);
         }
         
         public void SelectedAsTarget()

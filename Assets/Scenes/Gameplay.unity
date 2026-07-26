@@ -191,12 +191,12 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 100625294}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1601063244}
+  m_Father: {fileID: 1364563755}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -217,7 +217,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -283,6 +283,7 @@ GameObject:
   - component: {fileID: 228713215}
   - component: {fileID: 228713217}
   - component: {fileID: 228713216}
+  - component: {fileID: 228713218}
   m_Layer: 0
   m_Name: Counter
   m_TagString: Untagged
@@ -347,6 +348,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 228713214}
   m_CullTransparentMesh: 1
+--- !u!114 &228713218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 228713214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 267559eab5d55db1d9a7af8230836fc9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Counter
+  sprites:
+  - {fileID: 563321866, guid: de5dda32fa1932e2e8ffa9529f06da8d, type: 3}
+  - {fileID: 1876147453, guid: de5dda32fa1932e2e8ffa9529f06da8d, type: 3}
+  - {fileID: -757743670, guid: de5dda32fa1932e2e8ffa9529f06da8d, type: 3}
+  - {fileID: 5491754534597717925, guid: de5dda32fa1932e2e8ffa9529f06da8d, type: 3}
 --- !u!1 &267100719
 GameObject:
   m_ObjectHideFlags: 0
@@ -676,6 +694,81 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI.StartScene
   DEBUGText: {fileID: 320687836}
+--- !u!1 &454758992
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 454758993}
+  - component: {fileID: 454758995}
+  - component: {fileID: 454758994}
+  m_Layer: 0
+  m_Name: HealOverlay
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &454758993
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 454758992}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1364563755}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &454758994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 454758992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 6972001355114515961, guid: fc0360dccac3b24e7848f8154f81ca2e, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &454758995
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 454758992}
+  m_CullTransparentMesh: 1
 --- !u!1 &834572180
 GameObject:
   m_ObjectHideFlags: 0
@@ -1143,11 +1236,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!224 &1601063244 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 6181634895085808877, guid: 141d7cdb3a03abecea0242cdf0c4cbaa, type: 3}
-  m_PrefabInstance: {fileID: 2184035479774772767}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1623671756
 GameObject:
   m_ObjectHideFlags: 0
@@ -1503,6 +1591,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -76
       objectReference: {fileID: 0}
+    - target: {fileID: 4655411898278988112, guid: 141d7cdb3a03abecea0242cdf0c4cbaa, type: 3}
+      propertyPath: m_text
+      value: dsadsadsa
+      objectReference: {fileID: 0}
     - target: {fileID: 4753322608283627126, guid: 141d7cdb3a03abecea0242cdf0c4cbaa, type: 3}
       propertyPath: m_ReferencePixelsPerUnit
       value: 1
@@ -1535,6 +1627,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 9194708194112961603, guid: 141d7cdb3a03abecea0242cdf0c4cbaa, type: 3}
+      propertyPath: m_text
+      value: saSadsada
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -1543,10 +1639,13 @@ PrefabInstance:
       addedObject: {fileID: 228713215}
     - targetCorrespondingSourceObject: {fileID: 266636868439929910, guid: 141d7cdb3a03abecea0242cdf0c4cbaa, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 834572181}
-    - targetCorrespondingSourceObject: {fileID: 6181634895085808877, guid: 141d7cdb3a03abecea0242cdf0c4cbaa, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 100625295}
+    - targetCorrespondingSourceObject: {fileID: 266636868439929910, guid: 141d7cdb3a03abecea0242cdf0c4cbaa, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 834572181}
+    - targetCorrespondingSourceObject: {fileID: 266636868439929910, guid: 141d7cdb3a03abecea0242cdf0c4cbaa, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 454758993}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 141d7cdb3a03abecea0242cdf0c4cbaa, type: 3}
 --- !u!114 &2184035479774772768 stripped
@@ -1607,6 +1706,34 @@ PrefabInstance:
     - target: {fileID: 900935236581059806, guid: 137940612ee54c0e3acaacd0f4429db4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2831720790342176474, guid: 137940612ee54c0e3acaacd0f4429db4, type: 3}
+      propertyPath: DEBUG
+      value: 
+      objectReference: {fileID: 11400000, guid: 9e78bc63eef494972a9fbc72a1efd382, type: 2}
+    - target: {fileID: 2831720790342176474, guid: 137940612ee54c0e3acaacd0f4429db4, type: 3}
+      propertyPath: playerStats.maxAmmo
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2831720790342176474, guid: 137940612ee54c0e3acaacd0f4429db4, type: 3}
+      propertyPath: playerStats.maxHealth
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2831720790342176474, guid: 137940612ee54c0e3acaacd0f4429db4, type: 3}
+      propertyPath: playerStats.attackDamage
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2831720790342176474, guid: 137940612ee54c0e3acaacd0f4429db4, type: 3}
+      propertyPath: playerStats.reloadAmount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2831720790342176474, guid: 137940612ee54c0e3acaacd0f4429db4, type: 3}
+      propertyPath: playerStats.startingAmmo
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2831720790342176474, guid: 137940612ee54c0e3acaacd0f4429db4, type: 3}
+      propertyPath: playerStats.defencesInSequence
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5182729822462463659, guid: 137940612ee54c0e3acaacd0f4429db4, type: 3}
       propertyPath: m_Name
