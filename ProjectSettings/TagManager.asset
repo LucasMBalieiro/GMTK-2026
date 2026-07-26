@@ -44,5 +44,8 @@ TagManager:
   - name: Enemy
     uniqueID: 1245004549
     locked: 0
+  - name: HUD
+    uniqueID: 826460979
+    locked: 0
   m_RenderingLayers:
   - Default
