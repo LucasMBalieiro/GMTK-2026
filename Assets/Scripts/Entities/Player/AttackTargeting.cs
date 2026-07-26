@@ -8,7 +8,8 @@ namespace Entities
     public class AttackTargeting : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
     {
         [SerializeField] private PlayerController playerController;
-
+        [SerializeField] private Entity playerEntity;
+        
         [SerializeField] private TextMeshProUGUI text;
     
         [SerializeField] private Sprite crosshair;
@@ -32,7 +33,9 @@ namespace Entities
     
         public void OnBeginDrag(PointerEventData eventData)
         {
-            if(crosshair) image.sprite = crosshair;
+            if (playerEntity.CurrentAmmo <= 0) return;
+            
+            if (crosshair) image.sprite = crosshair;
             text.color = new Color(text.color.r, text.color.g, text.color.b, 0f);
             Cursor.visible = false;
             image.raycastTarget = false;
@@ -42,11 +45,15 @@ namespace Entities
 
         public void OnDrag(PointerEventData eventData)
         {
+            if (playerEntity.CurrentAmmo <= 0) return;
+            
             transform.position = eventData.position;
         }
 
         public void OnEndDrag(PointerEventData eventData)
         {
+            if (playerEntity.CurrentAmmo <= 0) return;
+            
             transform.position = originalPosition;
             image.sprite = startingSprite;
             text.color = new Color(text.color.r, text.color.g, text.color.b, 1f);
@@ -75,7 +82,10 @@ namespace Entities
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            gunRenderer.sprite = highlightedGun;
+            if (playerEntity.CurrentAmmo > 0) 
+            {
+                gunRenderer.sprite = highlightedGun;
+            }
         }
 
         public void OnPointerExit(PointerEventData eventData)
@@ -84,5 +94,3 @@ namespace Entities
         }
     }
 }
-
-

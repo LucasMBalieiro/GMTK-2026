@@ -48,7 +48,11 @@ public class ModalManager : MonoBehaviour
 
         private void Awake()
         {
-            if (Instance != null && Instance != this) Destroy(gameObject);
+            if (Instance != null && Instance != this) 
+            {
+                Destroy(gameObject);
+                return;
+            }
             
             Instance = this;
             DontDestroyOnLoad(gameObject);

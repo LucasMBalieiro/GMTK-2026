@@ -36,6 +36,9 @@ namespace Entities
         [SerializeField] private Sprite canHealSprite;
         [SerializeField] private Sprite cantHealSprite;
         
+        [Header("Reload overlay")]
+        [SerializeField] private Button reloadButton;
+        
         private List<SpriteRenderer> spawnedHearts = new List<SpriteRenderer>();
         private List<SpriteRenderer> spawnedBullets = new List<SpriteRenderer>();
         
@@ -44,7 +47,7 @@ namespace Entities
         private int previousHealth;
         private float damageAlpha = 0f;
         private float healAlpha = 0f;
-        [SerializeField] private float fadeSpeed = 2f;
+        [SerializeField] private float fadeSpeed = 2f; 
         
         private void Awake()
         {
@@ -96,11 +99,11 @@ namespace Entities
         {
             if (player.CurrentHealth < previousHealth)
             {
-                damageAlpha = 1f;
+                damageAlpha = 1f; 
             }
             else if (player.CurrentHealth > previousHealth)
             {
-                healAlpha = 1f;
+                healAlpha = 1f; 
             }
             previousHealth = player.CurrentHealth;
 
@@ -121,6 +124,9 @@ namespace Entities
             bool canDefend = !player.IsDead;
             if (defendButton != null) defendButton.interactable = canDefend;
             if (defendIconSpriteRenderer != null) defendIconSpriteRenderer.sprite = canDefend ? canDefendSprite : cantDefendSprite;
+
+            bool canReload = !player.IsDead && player.CurrentAmmo < player.data.maxAmmo;
+            if (reloadButton != null) reloadButton.interactable = canReload;
         }
 
         private void Update()

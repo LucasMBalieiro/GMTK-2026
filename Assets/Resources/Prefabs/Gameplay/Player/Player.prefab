@@ -1347,6 +1347,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AttackTargeting
   playerController: {fileID: 2899146802022003074}
+  playerEntity: {fileID: 4037431737338608089}
   text: {fileID: 7108634294427588728}
   crosshair: {fileID: 21300000, guid: cb4c2e596419e77a8aa6ce5548265f6e, type: 3}
   gunRenderer: {fileID: 9157744721551887250}
@@ -1679,6 +1680,7 @@ MonoBehaviour:
   healIconSpriteRenderer: {fileID: 3874320735819227658}
   canHealSprite: {fileID: 5268192772220182190, guid: 92abf368a53fed80e95ef6b793d6bb75, type: 3}
   cantHealSprite: {fileID: 3973117381374208661, guid: 629b4770ee721bbfe8c32c0084453f72, type: 3}
+  reloadButton: {fileID: 8455589499381392859}
   fadeSpeed: 1
 --- !u!1 &8532732772107751525
 GameObject:
