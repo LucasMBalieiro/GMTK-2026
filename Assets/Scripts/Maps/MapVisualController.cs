@@ -47,9 +47,22 @@ namespace RoguelikeMap
         public List<NodeTypeScene> nodeScenes = new List<NodeTypeScene>();
 
         [Header("Linhas")]
+        [Tooltip("Material das linhas PERCORRIDAS (sólidas). Se vazio, usa um material branco gerado automaticamente.")]
         public Material lineMaterial;
+        [Tooltip("Material das linhas NÃO percorridas (pontilhadas). Se vazio, gera um dash automático em runtime.")]
+        public Material dashedLineMaterial;
         public Color lineColor = Color.white;
+        [Tooltip("Cor das linhas depois de percorridas")]
+        public Color traversedLineColor = Color.green;
         public float lineWidth = 0.08f;
+        [Tooltip("Quantos 'dashes' por unidade de mundo na linha pontilhada")]
+        public float dashTilingPerUnit = 1f;
+
+        private Material runtimeDashedMaterial;
+        private Material runtimeSolidMaterial;
+        private Dictionary<string, LineRenderer> spawnedLines;
+        private readonly Dictionary<string, Material> lineMaterialInstances = new Dictionary<string, Material>();
+        private readonly Dictionary<string, bool> lineTraversedState = new Dictionary<string, bool>();
 
         [Header("Câmera")]
         public Camera targetCamera;   
@@ -59,6 +72,7 @@ namespace RoguelikeMap
         [Tooltip("Quanto da tela o grafo deve preencher. 0.8 = grafo ocupa 80%, sobrando 20% de respiro nas bordas.")]
         public float viewportFillPercent = 0.8f;
 
+        // --- Estado de progressão (em memória, reseta ao recarregar a cena) ---
         private MapData currentMap;
         private Dictionary<int, GameObject> spawnedNodes;
         private readonly List<int> visitedPath = new List<int>();
@@ -76,12 +90,12 @@ namespace RoguelikeMap
 
             SpawnBackground(map, bounds);
             var spawned = SpawnNodes(map);
-            SpawnConnections(map, spawned);
+            spawnedLines = SpawnConnections(map);
 
             currentMap = map;
             spawnedNodes = spawned;
-            visitedPath.Clear(); 
-            RefreshAllNodeStates();
+            visitedPath.Clear(); // nada visitado ainda — nó inicial nasce Available, exige clique
+            RefreshMapVisuals();
 
             if (fitCameraToMap) FitCamera(bounds);
         }
@@ -117,6 +131,8 @@ namespace RoguelikeMap
 
         private void Clear()
         {
+            DestroyAllLineMaterialInstances();
+
             for (int i = transform.childCount - 1; i >= 0; i--)
             {
                 var child = transform.GetChild(i).gameObject;
@@ -129,13 +145,30 @@ namespace RoguelikeMap
             }
         }
 
+        private void DestroyAllLineMaterialInstances()
+        {
+            foreach (var mat in lineMaterialInstances.Values)
+            {
+                if (mat == null) continue;
+                #if UNITY_EDITOR
+                if (!Application.isPlaying) DestroyImmediate(mat);
+                else Destroy(mat);
+                #else
+                Destroy(mat);
+                #endif
+            }
+            lineMaterialInstances.Clear();
+            lineTraversedState.Clear();
+        }
+
         private void SpawnBackground(MapData map, Bounds bounds)
         {
             if (backgroundPrefab == null) return;
 
             var bg = Instantiate(backgroundPrefab, transform);
             bg.name = "Background";
-            bg.transform.position = new Vector3(bounds.center.x, bounds.center.y, 0.1f); 
+            bg.transform.position = new Vector3(bounds.center.x, bounds.center.y, 0.1f); // atrás dos nós
+
             var spriteSize = bg.sprite.bounds.size;
             var targetSize = new Vector2(bounds.size.x, bounds.size.y) + Vector2.one * backgroundPadding * 2f;
             bg.transform.localScale = new Vector3(
@@ -177,8 +210,10 @@ namespace RoguelikeMap
     return spawned;
     }
 
-        private void SpawnConnections(MapData map, Dictionary<int, GameObject> spawnedNodes)
+        private Dictionary<string, LineRenderer> SpawnConnections(MapData map)
         {
+            var lines = new Dictionary<string, LineRenderer>();
+
             foreach (var node in map.Nodes)
             {
                 foreach (var targetId in node.ConnectionsToNextLayer)
@@ -187,17 +222,21 @@ namespace RoguelikeMap
                     lineGO.transform.SetParent(transform);
 
                     var lr = lineGO.AddComponent<LineRenderer>();
-                    lr.material = lineMaterial;
-                    lr.startColor = lr.endColor = lineColor;
                     lr.startWidth = lr.endWidth = lineWidth;
                     lr.positionCount = 2;
                     lr.sortingOrder = 0;
                     lr.useWorldSpace = true;
                     lr.SetPosition(0, node.Position);
                     lr.SetPosition(1, map.Nodes.First(n => n.Id == targetId).Position);
+
+                    lines[LineKey(node.Id, targetId)] = lr;
                 }
             }
+
+            return lines;
         }
+
+        private static string LineKey(int fromId, int toId) => $"{fromId}_{toId}";
 
         private Bounds ComputeBounds(MapData map)
         {
@@ -212,6 +251,8 @@ namespace RoguelikeMap
             b.SetMinMax(new Vector3(min.x, min.y, 0), new Vector3(max.x, max.y, 0));
             return b;
         }
+
+        // --- Progressão ---
 
         public NodeProgressState GetNodeState(int nodeId)
         {
@@ -242,7 +283,7 @@ namespace RoguelikeMap
             }
 
             visitedPath.Add(nodeId);
-            RefreshAllNodeStates();
+            RefreshMapVisuals();
             OnNodeSelected(nodeId);
             return true;
         }
@@ -264,6 +305,12 @@ namespace RoguelikeMap
             SceneManager.LoadScene(mapping.SceneName);
         }
 
+        private void RefreshMapVisuals()
+        {
+            RefreshAllNodeStates();
+            RefreshAllLineStates();
+        }
+
         private void RefreshAllNodeStates()
         {
             if (currentMap == null || spawnedNodes == null) return;
@@ -275,6 +322,92 @@ namespace RoguelikeMap
                 if (clickHandler != null)
                     clickHandler.SetProgressState(GetNodeState(node.Id));
             }
+        }
+
+        private void RefreshAllLineStates()
+        {
+            if (currentMap == null || spawnedLines == null) return;
+
+            foreach (var node in currentMap.Nodes)
+            {
+                foreach (var targetId in node.ConnectionsToNextLayer)
+                {
+                    string key = LineKey(node.Id, targetId);
+                    if (!spawnedLines.TryGetValue(key, out var lr)) continue;
+                    ApplyLineVisual(key, lr, IsEdgeTraversed(node.Id, targetId));
+                }
+            }
+        }
+
+        private bool IsEdgeTraversed(int fromId, int toId)
+        {
+            int fromIndex = visitedPath.IndexOf(fromId);
+            if (fromIndex < 0 || fromIndex + 1 >= visitedPath.Count) return false;
+            return visitedPath[fromIndex + 1] == toId;
+        }
+
+        private void ApplyLineVisual(string key, LineRenderer lr, bool traversed)
+        {
+            bool hasInstance = lineMaterialInstances.TryGetValue(key, out var instance) && instance != null;
+            bool stateChanged = !lineTraversedState.TryGetValue(key, out var previousTraversed) || previousTraversed != traversed;
+
+            if (!hasInstance || stateChanged)
+            {
+                var baseMat = traversed
+                    ? (lineMaterial != null ? lineMaterial : GetRuntimeSolidMaterial())
+                    : (dashedLineMaterial != null ? dashedLineMaterial : GetRuntimeDashedMaterial());
+
+                if (hasInstance)
+                {
+                    #if UNITY_EDITOR
+                    if (!Application.isPlaying) DestroyImmediate(instance);
+                    else Destroy(instance);
+                    #else
+                    Destroy(instance);
+                    #endif
+                }
+
+                instance = new Material(baseMat);
+                lineMaterialInstances[key] = instance;
+                lineTraversedState[key] = traversed;
+                lr.sharedMaterial = instance;
+            }
+
+            lr.startColor = lr.endColor = traversed ? traversedLineColor : lineColor;
+            lr.textureMode = traversed ? LineTextureMode.Stretch : LineTextureMode.Tile;
+
+            if (!traversed)
+            {
+                float length = Vector3.Distance(lr.GetPosition(0), lr.GetPosition(1));
+                instance.mainTextureScale = new Vector2(Mathf.Max(1f, length * dashTilingPerUnit), 1f);
+            }
+        }
+
+        private Material GetRuntimeSolidMaterial()
+        {
+            if (runtimeSolidMaterial == null)
+                runtimeSolidMaterial = new Material(Shader.Find("Sprites/Default"));
+            return runtimeSolidMaterial;
+        }
+
+        private Material GetRuntimeDashedMaterial()
+        {
+            if (runtimeDashedMaterial == null)
+            {
+                var tex = new Texture2D(4, 1, TextureFormat.RGBA32, false);
+                tex.wrapMode = TextureWrapMode.Repeat;
+                tex.filterMode = FilterMode.Point;
+                tex.SetPixels(new[]
+                {
+                    Color.white, Color.white,
+                    new Color(1f, 1f, 1f, 0f), new Color(1f, 1f, 1f, 0f)
+                });
+                tex.Apply();
+
+                runtimeDashedMaterial = new Material(Shader.Find("Sprites/Default"));
+                runtimeDashedMaterial.mainTexture = tex;
+            }
+            return runtimeDashedMaterial;
         }
     }
 }
