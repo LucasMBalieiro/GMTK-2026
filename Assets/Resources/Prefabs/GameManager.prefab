@@ -45,9 +45,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   playerStats:
-    maxHealth: 0
-    maxAmmo: 0
-    startingAmmo: 0
-    attackDamage: 0
-    reloadAmount: 0
-    defencesInSequence: 0
+    maxHealth: 3
+    maxAmmo: 1
+    startingAmmo: 1
+    attackDamage: 1
+    reloadAmount: 1
+    defencesInSequence: 1
+  musicData: {fileID: 11400000, guid: 85fa507ef29fb0abda06411b73fd33cc, type: 2}

@@ -62,7 +62,7 @@ namespace Entities
             for (int i = 0; i < player.data.maxAmmo; i++)
             {
                 SpriteRenderer bullet = Instantiate(bulletPrefab, bulletParent);
-                bullet.transform.localPosition = new Vector3(21f + (i * 14f), 15f, 0f); 
+                bullet.transform.localPosition = new Vector3(0f + (i * 14f), 0f, 0f); 
                 spawnedBullets.Add(bullet);
             }
 

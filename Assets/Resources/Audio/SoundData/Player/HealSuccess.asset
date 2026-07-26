@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 290a1ddd808dd234ba151d61c677dfe5, type: 3}
-  m_Name: LaserGun
+  m_Name: HealSuccess
   m_EditorClassIdentifier: AudioSystem::AudioSystem.SoundData
-  audioClip: {fileID: 0}
-  audioMixerGroup: {fileID: 0}
+  audioClip: {fileID: 8300000, guid: 2e1bbc924c766a0419442e541754cbe7, type: 3}
+  audioMixerGroup: {fileID: -8909758718914616196, guid: 06e3dc53df401724a99ad836b15e51f5, type: 2}
   frequentSound: 0
   loop: 0
   pitch: 1

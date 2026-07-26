@@ -12,4 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25a3ce4d62ba8324c96823e392ac7f2a, type: 3}
   m_Name: LevelPool
   m_EditorClassIdentifier: Assembly-CSharp::Level.LevelPool
-  phases: []
+  phases:
+  - SceneName: Gameplay
+    Data: {fileID: 11400000, guid: 9e78bc63eef494972a9fbc72a1efd382, type: 2}
+  - SceneName: Gameplay
+    Data: {fileID: 11400000, guid: dcd49e2e02b7785a594534736fb55acd, type: 2}
+  - SceneName: Gameplay
+    Data: {fileID: 11400000, guid: de1cbb2490f41c146b406ac19728dab5, type: 2}

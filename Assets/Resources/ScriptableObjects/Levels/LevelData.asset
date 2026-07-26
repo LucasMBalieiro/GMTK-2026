@@ -12,5 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6cc191750e98cc18805e3af3893d7a4, type: 3}
   m_Name: LevelData
   m_EditorClassIdentifier: Assembly-CSharp::Level.LevelData
-  enemies: []
+  enemies:
+  - {fileID: 11400000, guid: 8f2991b2f40f627a696e00b571199df8, type: 2}
+  - {fileID: 11400000, guid: 8f2991b2f40f627a696e00b571199df8, type: 2}
+  - {fileID: 11400000, guid: 8f2991b2f40f627a696e00b571199df8, type: 2}
   coinsOnWin: 0
