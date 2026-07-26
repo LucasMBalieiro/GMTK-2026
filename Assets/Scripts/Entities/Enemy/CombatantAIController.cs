@@ -1,3 +1,4 @@
+using AudioSystem;
 using UnityEngine;
 
 namespace Entities
@@ -8,6 +9,9 @@ namespace Entities
         private Entity playerTarget;
         private EnemyDataSO enemyDataSO;
         private EnemyVisual visual;
+
+        [SerializeField] private SoundData reloadSound;
+        
         
         private Entity self;
 

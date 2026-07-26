@@ -74,6 +74,7 @@ public class Orchestrator : MonoBehaviour
         
         if (currentTick >= tempoTicks)
         {
+            //TODO: tirar o som daqui
             SoundManager.Instance.CreateSound().Play(noPlayerInputSound);
             HandleSkillOrder();
             currentTick = 0;
@@ -104,14 +105,12 @@ public class Orchestrator : MonoBehaviour
     
     private static void ExecuteSkill(Entity caster, Skill skill)
     {
-        // 1. Broadcast the action so visuals can react on the tempo reset!
         EventBus<ActionExecutedEvent>.Raise(new ActionExecutedEvent 
         { 
             Caster = caster, 
             SkillType = skill.type 
         });
-
-        // 2. Resolve the logic
+        
         switch (skill.type)
         {
             case SkillType.Defend:
