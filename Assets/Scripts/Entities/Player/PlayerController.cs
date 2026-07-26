@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Entities
@@ -8,6 +9,8 @@ namespace Entities
         private Entity self;
         
         private EntityData playerStats;
+
+        public event Action UpdateVisual;
         
         private Skill reload;
         private Skill attack;
@@ -19,6 +22,11 @@ namespace Entities
             self = GetComponent<Entity>();
             self.IsPlayer = true;
             playerStats = GameManager.Instance.PlayerStats;
+            
+            self.InitializeData(playerStats);
+            
+            UpdateVisual?.Invoke();
+            
             SetSkills();
         }
 

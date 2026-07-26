@@ -155,7 +155,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edef720198064bfab19dc0a1b71d60cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Entities.Entity
-  data: {fileID: 11400000, guid: 8f2991b2f40f627a696e00b571199df8, type: 2}
+  data:
+    maxHealth: 0
+    maxAmmo: 0
+    startingAmmo: 0
+    attackDamage: 0
+    reloadAmount: 0
+    defencesInSequence: 0
 --- !u!114 &6177011128200575881
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -168,7 +174,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66b6de61c90c42d280e3e7726f2cb4de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Entities.CombatantAIController
-  playerTarget: {fileID: 0}
 --- !u!114 &7203486507958818726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -182,7 +187,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Entities.EnemyVisual
   healthGrid: {fileID: 2549798632145923408}
-  bulletGrid: {fileID: 7511751909846649021}
+  ammoGrid: {fileID: 7511751909846649021}
 --- !u!1 &3433670509266924716
 GameObject:
   m_ObjectHideFlags: 0

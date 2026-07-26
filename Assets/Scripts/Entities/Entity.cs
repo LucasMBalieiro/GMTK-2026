@@ -15,6 +15,8 @@ namespace Entities
         private bool canHeal = true;
         private bool isDefending = false;
         
+        public event Action OnDeath;
+        
         private EventBinding<ResetConditions> resetBinding;
         
         public void InitializeData(EntityData newData)
@@ -51,7 +53,7 @@ namespace Entities
             
             if (IsDead)
             {
-                //TODO: Handle deaths
+                OnDeath?.Invoke();
             }
             canHeal = false;
         }
