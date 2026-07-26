@@ -7,11 +7,7 @@ namespace Entities
     {
         public Entity Entity { get; private set; }
 
-        [Header("Sprites")]
-        [SerializeField] private Sprite idle1;
-        [SerializeField] private Sprite idle2;
-        [SerializeField] private Sprite attack;
-        [SerializeField] private Sprite defend;
+        private EnemyDataSO enemyDataSO;
         
         private SpriteRenderer _spriteRenderer;
         private bool _isIdle1 = true;
@@ -24,6 +20,11 @@ namespace Entities
         {
             Entity = GetComponent<Entity>();
             _spriteRenderer = GetComponent<SpriteRenderer>();
+        }
+
+        public void InitializeData(EnemyDataSO data)
+        {
+            enemyDataSO = data;
         }
 
         private void OnEnable()
@@ -43,33 +44,29 @@ namespace Entities
 
         private void OnTick()
         {
-            // If an action just played on the tempo reset, hold the pose for this tick
             if (_holdPoseTicks > 0)
             {
                 _holdPoseTicks--;
                 return;
             }
 
-            // Otherwise, loop the idle animation
             _isIdle1 = !_isIdle1;
-            _spriteRenderer.sprite = _isIdle1 ? idle1 : idle2;
+            _spriteRenderer.sprite = _isIdle1 ? enemyDataSO.idle1 : enemyDataSO.idle2;
         }
 
         private void OnActionExecuted(ActionExecutedEvent eventData)
         {
-            // Only react if this specific enemy is the one who casted the skill
             if (eventData.Caster != Entity) return;
             
             if (eventData.SkillType == SkillType.Attack)
             {
-                _spriteRenderer.sprite = attack;
+                _spriteRenderer.sprite = enemyDataSO.attack;
             }
             else if (eventData.SkillType == SkillType.Defend)
             {
-                _spriteRenderer.sprite = defend;
+                _spriteRenderer.sprite = enemyDataSO.defend;
             }
             
-            // Tell the Tick method to skip the next idle flip so we can see the action
             _holdPoseTicks = 1;
         }
         

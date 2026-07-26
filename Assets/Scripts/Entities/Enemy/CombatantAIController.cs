@@ -5,7 +5,9 @@ namespace Entities
     [RequireComponent(typeof(Entity))]
     public class CombatantAIController  : MonoBehaviour
     {
-        [SerializeField] private Entity playerTarget;
+        private Entity playerTarget;
+        private EnemyDataSO enemyDataSO;
+        private EnemyVisual visual;
         
         private Entity self;
 
@@ -21,11 +23,20 @@ namespace Entities
         private void Awake()
         {
             self = GetComponent<Entity>();
-            
+            visual = GetComponent<EnemyVisual>();
             self.IsPlayer = false;
+        }
+
+        public void Initialize(EnemyDataSO data, Entity player)
+        {
+            enemyDataSO = data;
+            playerTarget = player;
             
-            attack = new Skill(SkillType.Attack, playerTarget, self.data.stats.attackDamage);
-            reload = new Skill(SkillType.Reload, self, self.data.stats.reloadAmount);
+            self.InitializeData(enemyDataSO.data);
+            visual.InitializeData(enemyDataSO);
+            
+            attack = new Skill(SkillType.Attack, playerTarget, self.data.attackDamage);
+            reload = new Skill(SkillType.Reload, self, self.data.reloadAmount);
             defend = new Skill(SkillType.Defend, self, 0);
         }
 
@@ -59,7 +70,7 @@ namespace Entities
             bool hasAmmo = self.CurrentAmmo > 0;
             bool isFullAmmo = self.CurrentAmmo >= self.data.maxAmmo;
             
-            bool canDefend = consecutiveDefends < self.data.stats.defencesInSequence;
+            bool canDefend = consecutiveDefends < self.data.defencesInSequence;
             
             if (!hasAmmo)
             {

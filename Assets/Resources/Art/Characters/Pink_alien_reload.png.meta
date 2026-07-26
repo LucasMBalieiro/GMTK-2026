@@ -1,10 +1,13 @@
 fileFormatVersion: 2
-guid: 558f4c1f30a4b7dcb864c13672709043
+guid: a7bc12d0474c25238830e2e34cb75820
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7282461348544508605
-    second: Background2_0
+      213: 6757258555904496656
+    second: Pink_alien_reload_0
+  - first:
+      213: -7681638456265086339
+    second: Pink_alien_reload_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,7 +49,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -113,23 +116,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Background2_0
+      name: Pink_alien_reload_1
       rect:
         serializedVersion: 2
-        x: 0
+        x: 60
         y: 0
-        width: 320
-        height: 180
+        width: 60
+        height: 70
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: db2f18a2300801560800000000000000
-      internalID: 7282461348544508605
+      spriteID: d7ae659e586556590800000000000000
+      internalID: -7681638456265086339
       vertices: []
       indices: 
       edges: []
@@ -138,7 +141,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 69d4479c8d62042569125d7299708dca
     internalID: 0
     vertices: []
     indices: 
@@ -146,9 +149,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":2.0,"y":1.0},"gridSpriteSize":{"x":60.0,"y":70.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      Background2_0: 7282461348544508605
+      Pink_alien_reload_0: 6757258555904496656
+      Pink_alien_reload_1: -7681638456265086339
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

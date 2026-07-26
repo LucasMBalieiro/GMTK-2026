@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b419e1f9f93678a38f3b289820d2685, type: 3}
+  m_Name: PinkGirl
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyDataSO
+  data:
+    maxHealth: 2
+    maxAmmo: 1
+    startingAmmo: 0
+    attackDamage: 1
+    reloadAmount: 1
+    defencesInSequence: 3
+  idle1: {fileID: 8929936795182671204, guid: d758af597af5366c2b366f237fcd26cf, type: 3}
+  idle2: {fileID: 5466718959890541799, guid: d758af597af5366c2b366f237fcd26cf, type: 3}
+  attack: {fileID: 6403119193784978028, guid: d758af597af5366c2b366f237fcd26cf, type: 3}
+  defend: {fileID: 8031110639372960824, guid: d758af597af5366c2b366f237fcd26cf, type: 3}
+  reload: {fileID: -7681638456265086339, guid: a7bc12d0474c25238830e2e34cb75820, type: 3}
+  heal: {fileID: 0}

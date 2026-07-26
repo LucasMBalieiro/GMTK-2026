@@ -18,8 +18,9 @@ namespace Entities
         
         private EventBinding<ResetConditions> onReset;
         private int maxContainers;
-
-        private void Awake()
+        
+        
+        private void Start()
         {
             maxContainers = isHealthContainer ? entity.data.maxHealth : entity.data.maxAmmo;
             
@@ -28,14 +29,14 @@ namespace Entities
                 var container = Instantiate(containerPrefab, transform);
                 containers.Add(container.GetComponent<SpriteRenderer>());
             }
+            
+            InitialUI();
         }
 
         private void OnEnable()
         {
             onReset = new EventBinding<ResetConditions>(UpdateUI);
             EventBus<ResetConditions>.Register(onReset);
-            
-            InitialUI();
         }
 
         private void OnDisable()

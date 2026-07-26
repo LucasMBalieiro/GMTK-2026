@@ -1,16 +1,16 @@
-using UnityEngine;
-
+using System;
 
 namespace Entities
 {
-    [CreateAssetMenu(fileName = "EntityData", menuName = "Entity/EntityData")]
-    public class EntityData : ScriptableObject
+    [Serializable]
+    public struct EntityData
     {
         public int maxHealth;
         public int maxAmmo;
         public int startingAmmo;
-        
-        public Stats stats;
+        public int attackDamage;
+        public int reloadAmount;
+        public int defencesInSequence;
         
     }
     

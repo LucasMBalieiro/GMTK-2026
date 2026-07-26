@@ -8,7 +8,7 @@ namespace Entities
         private Entity self;
 
         //TODO: Fazer uma versão unica disso no GameManager
-        [SerializeField] private Stats PlayerStats;
+        [SerializeField] private EntityData playerStats;
         
         private Skill reload;
         private Skill attack;
@@ -26,8 +26,8 @@ namespace Entities
         private void SetSkills()
         {
             defend = new Skill(SkillType.Defend, self, 0);
-            attack = new Skill(SkillType.Attack, PlayerStats.attackDamage);
-            reload = new Skill(SkillType.Reload, self, PlayerStats.reloadAmount);
+            attack = new Skill(SkillType.Attack, playerStats.attackDamage);
+            reload = new Skill(SkillType.Reload, self, playerStats.reloadAmount);
             heal = new Skill(SkillType.Heal, self, self.data.maxHealth);
             
         }
