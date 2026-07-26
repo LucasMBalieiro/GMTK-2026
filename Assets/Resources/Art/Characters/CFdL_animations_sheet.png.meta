@@ -66,7 +66,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 1
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -128,15 +128,15 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: CFdL_animations_sheet_0
+      name: CFdL_idle_0
       rect:
         serializedVersion: 2
-        x: 6
-        y: 139
-        width: 34
-        height: 68
+        x: 0
+        y: 140
+        width: 50
+        height: 70
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -150,15 +150,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: CFdL_animations_sheet_1
+      name: CFdL_idle_1
       rect:
         serializedVersion: 2
-        x: 56
-        y: 139
-        width: 34
-        height: 68
+        x: 50
+        y: 140
+        width: 50
+        height: 70
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -172,37 +172,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: CFdL_animations_sheet_2
+      name: CFdL_shooting
       rect:
         serializedVersion: 2
-        x: 6
-        y: 69
-        width: 34
-        height: 68
+        x: 50
+        y: 70
+        width: 50
+        height: 70
       alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 6f4f7bb68770b1a80800000000000000
-      internalID: -8495188058319620874
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: CFdL_animations_sheet_3
-      rect:
-        serializedVersion: 2
-        x: 56
-        y: 69
-        width: 35
-        height: 67
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -216,37 +194,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: CFdL_animations_sheet_4
+      name: CFdL_shielding
       rect:
         serializedVersion: 2
-        x: 6
+        x: 50
         y: 0
-        width: 34
-        height: 67
+        width: 50
+        height: 70
       alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: bb7e62ab36fcb1bb0800000000000000
-      internalID: -4964146137014016069
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: CFdL_animations_sheet_5
-      rect:
-        serializedVersion: 2
-        x: 56
-        y: 0
-        width: 37
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -263,7 +219,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 1ba29d3c5b6083ccfbc32cf8c4064a2e
     internalID: 0
     vertices: []
     indices: 
@@ -271,14 +227,16 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":2.0,"y":3.0},"gridSpriteSize":{"x":50.0,"y":70.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      CFdL_animations_sheet_0: -2854159445660646647
-      CFdL_animations_sheet_1: -808295134313720394
       CFdL_animations_sheet_2: -8495188058319620874
-      CFdL_animations_sheet_3: -5588896094033563765
       CFdL_animations_sheet_4: -4964146137014016069
-      CFdL_animations_sheet_5: 3155169172337932691
+      CFdL_idle_0: -2854159445660646647
+      CFdL_idle_1: -808295134313720394
+      CFdL_shielding: 3155169172337932691
+      CFdL_shooting: -5588896094033563765
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
