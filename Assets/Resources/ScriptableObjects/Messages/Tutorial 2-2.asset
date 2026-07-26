@@ -10,15 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 23b0766a95581d7a7a79a17a8f4fc0c9, type: 3}
-  m_Name: WinMessage
+  m_Name: Tutorial 2-2
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::ModalScriptableObject
-  title: You Win!
-  message: 'This time you were the quickest draw, you may live another day.
+  title: Tutorial
+  message: 'You can defend to block all damage.
+
+    You can heal to fully restore
+    your health (but if enemies attack you during this time it will get canceled).
 
     You
-    gain one extra health'
+    reload all your ammo at a time.'
   contentImage: {fileID: 0}
   layout: 0
-  confirmText: Return to Map
-  cancelText: 
+  confirmText: Next
+  cancelText: Back
   alternativeText: 

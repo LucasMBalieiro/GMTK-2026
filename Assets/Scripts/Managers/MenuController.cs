@@ -11,6 +11,13 @@ public class MainMenuController : MonoBehaviour
     [Tooltip("Painel de Opções, desativado por padrão. Arraste o GameObject aqui.")]
     [SerializeField] private GameObject optionsPanel;
 
+    [SerializeField] private ModalScriptableObject tutorial1;
+    [SerializeField] private ModalScriptableObject tutorial2;
+    [SerializeField] private ModalScriptableObject tutorial2_2;
+    
+    [SerializeField] private ModalScriptableObject tutorial3;
+    
+
     private void Awake()
     {
         if (optionsPanel != null)
@@ -27,9 +34,32 @@ public class MainMenuController : MonoBehaviour
         }
 
         if (GameManager.Instance != null)
+        {
             GameManager.Instance.ResetMapProgress();
+            GameManager.Instance.RestartPlayer();
+        }
 
         SceneManager.LoadScene(mapSceneName);
+    }
+
+    public void OpenTutorial()
+    {
+        ModalManager.Instance.ShowModal(tutorial1, onConfirm: OpenTutorial2, autoCloseConfirm: false);
+    }
+
+    private void OpenTutorial2()
+    {
+        ModalManager.Instance.ShowModal(tutorial2, onConfirm: OpenTutorial2_2, onCancel: OpenTutorial, autoCloseConfirm: false, autoCloseCancel: false);
+    }
+
+    private void OpenTutorial2_2()
+    {
+        ModalManager.Instance.ShowModal(tutorial2_2, onConfirm: OpenTutorial3, onCancel: OpenTutorial2, autoCloseConfirm: false, autoCloseCancel: false);
+    }
+
+    private void OpenTutorial3()
+    {
+        ModalManager.Instance.ShowModal(tutorial3, onCancel: OpenTutorial2_2, autoCloseCancel: false);
     }
 
     // Ligar no botão "Opções"

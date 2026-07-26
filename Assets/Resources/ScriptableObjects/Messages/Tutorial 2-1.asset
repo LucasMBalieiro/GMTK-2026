@@ -10,20 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 23b0766a95581d7a7a79a17a8f4fc0c9, type: 3}
-  m_Name: Tutorial 2
+  m_Name: Tutorial 2-1
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::ModalScriptableObject
   title: Tutorial
-  message: 'Keep in mind your health and ammo (top left on the game scene).
-
-
-    You
-    can defend to block all damage.
-
-    You can heal to fully restore your health
-    (but if enemies attack you during this time it will get canceled).
-
-    You can
-    reload one bullet at a time as well.'
+  message: Keep in mind your health and ammo (top left on the game scene).
   contentImage: {fileID: 0}
   layout: 0
   confirmText: Next

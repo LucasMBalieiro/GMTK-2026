@@ -56,6 +56,20 @@ public class GameManager : MonoBehaviour
             musicPlaying = true;
         }
     }
+
+    public void RestartPlayer()
+    {
+        playerStats.maxHealth = 3;
+        playerStats.maxAmmo = 1;
+        playerStats.reloadAmount = 1;
+    }
+    
+    public void UpgradePlayer()
+    {
+        playerStats.maxHealth += 1;
+        playerStats.maxAmmo += 1;
+        playerStats.reloadAmount += 1;
+    }
     
     public void SetLevelData(LevelData levelData)
     {

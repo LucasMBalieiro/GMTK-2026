@@ -39,7 +39,10 @@ namespace Managers
         private void HandlePlayerDeath()
         {
             EventBus<PauseMetronome>.Raise(new PauseMetronome());
-            ModalManager.Instance.ShowModal(loseMessage, onConfirm: () => {SceneManager.LoadScene("MainMenu");});
+            ModalManager.Instance.ShowModal(loseMessage, onConfirm: () =>
+            {
+                SceneManager.LoadScene("MainMenu");
+            });
         }
 
         private void EvaluateWinCondition()
@@ -58,7 +61,11 @@ namespace Managers
             if (allEnemiesDead)
             {
                 EventBus<PauseMetronome>.Raise(new PauseMetronome());
-                ModalManager.Instance.ShowModal(winMessage, onConfirm: () => {SceneManager.LoadScene("MapScene");});
+                ModalManager.Instance.ShowModal(winMessage, onConfirm: () =>
+                {
+                    GameManager.Instance.UpgradePlayer();
+                    SceneManager.LoadScene("MapScene");
+                });
             }
         }
     }
